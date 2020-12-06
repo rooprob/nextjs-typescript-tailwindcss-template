@@ -1,13 +1,9 @@
-import Head from 'next/head'
 import Link from 'next/link'
-import Layout from '../../components/layout'
+import Layout from '../../components/Layout'
 
 export default function SecondPost() {
   return (
-      <Layout>
-          <Head>
-              <title>Second Post</title>
-          </Head>
+      <Layout title="Second post">
           <h1>Second Post</h1>
           <h2>
               <Link href="/">

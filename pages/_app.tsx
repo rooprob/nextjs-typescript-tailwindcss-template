@@ -1,7 +1,9 @@
 import '../styles/index.css'
 import { ThemeProvider } from 'next-themes';
 
-function MyApp({ Component, pageProps }) {
+import type { AppProps /*, AppContext */ } from 'next/app'
+
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider attribute="class">
       <Component {...pageProps} />
