@@ -4,7 +4,18 @@
 //
 // import User from 'path/to/interfaces';
 
+export type AuthUser = {
+  id: string 
+  email: string | null
+  token: string
+}
+
 export type User = {
+  id: number
+  name: string
+}
+
+export type Food = {
   id: number
   name: string
 }

@@ -1,19 +1,35 @@
 import Link from 'next/link'
-import Head from 'next/head'
 
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import Layout from '../components/Layout';
 
+import useSWR from 'swr';
+import { useUser } from '../utils/auth/useUser';
 
 const posts = [
   { id: 1, link: '/posts/first-post', title: 'this page', time: '2020-10-23 20:33:00', content: 'first post' },
   { id: 2, link: '/posts/second-post', title: 'second page', time: '2020-10-23 20:33:00', content: 'second post' }
 ]
 
+const fetcher = (url: string, token: string) =>
+  fetch(url, {
+    method: 'GET',
+    headers: new Headers({'Context-Type': 'application/json', token}),
+    credentials: 'same-origin',
+  }).then((res) => res.json());
+
 export default function IndexPage() {
   const [isMounted, setIsMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const { user, logout } = useUser();
+  const { data, error } = useSWR(
+    user ? ['/api/food', user.token]: null,
+    fetcher
+  );
+
+  console.log("received user:", user);
+  console.log("received logout:", logout);
 
   useEffect(() => {
     setIsMounted(true);
@@ -26,7 +42,7 @@ export default function IndexPage() {
   };
 
   return (
-    <Layout title="Darkmode, Typescript, Tailwind 2.0, Next.js">
+    <Layout title="Darkmode, Typescript, Tailwind 2.0, Next.js" user={user} logout={logout}>
       <main className="container max-w-c1 mx-auto">
         <h1>Darkmode + Next.js + Tailwind CSS</h1>
         <ul className="markdown">
