@@ -37,15 +37,13 @@ const useUser = () => {
     // makes sure the react state and the cookie are
     // both kept up to date
     const cancelAuthListener = firebase.auth().onIdTokenChanged(
-      async (user: User | null) => {
+      (user: User | null) => {
         if (user) {
-          console.log("User successful");
-          const userData = await mapUserData(user);
-          setUserCookie(userData);
-          setUser(userData);
-          console.log(userData);
+          mapUserData(user).then((userData) => {
+            setUserCookie(userData);
+            setUser(userData);
+          })
         } else {
-          console.log("Unsuccessful");
           removeUserCookie();
           setUser(undefined);
         }
@@ -65,8 +63,6 @@ const useUser = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  console.log("returning user:", user);
-  console.log("returning login:", logout);
   return { user, logout }
 }
 

@@ -23,7 +23,6 @@ const firebaseAuthConfig: firebaseui.auth.Config = {
   callbacks: {
     signInSuccessWithAuthResult: ({ user }: any, redirectUrl: string): boolean => {
         mapUserData(user).then((userData) => {
-            console.log(userData);
             setUserCookie(userData);
         });
         return true;

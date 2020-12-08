@@ -1,17 +1,19 @@
 import { GetStaticProps } from 'next'
 import Link from 'next/link'
 
-import { User } from '../../interfaces'
+import { AuthUser, User } from '../../interfaces'
 import { sampleUserData } from '../../utils/sample-data'
 import Layout from '../../components/Layout'
 import List from '../../components/ListUsers'
 
 type Props = {
+  user: AuthUser,
+  logout: any,
   items: User[]
 }
 
-const WithStaticProps = ({ items }: Props) => (
-  <Layout title="Users List | Next.js + TypeScript Example">
+const WithStaticProps = ({ user, logout, items }: Props) => (
+  <Layout title="Users List | Next.js + TypeScript Example" user={user} logout={logout}>
     <h1>Users List</h1>
     <p>
       Example fetching data from inside <code>getStaticProps()</code>.

@@ -5,7 +5,6 @@ import { useTheme } from 'next-themes';
 import Layout from '../components/Layout';
 
 import useSWR from 'swr';
-import { useUser } from '../utils/auth/useUser';
 
 const posts = [
   { id: 1, link: '/posts/first-post', title: 'this page', time: '2020-10-23 20:33:00', content: 'first post' },
@@ -19,17 +18,14 @@ const fetcher = (url: string, token: string) =>
     credentials: 'same-origin',
   }).then((res) => res.json());
 
-export default function IndexPage() {
+export default function IndexPage(props: any) {
   const [isMounted, setIsMounted] = useState(false);
   const { theme, setTheme } = useTheme();
-  const { user, logout } = useUser();
+  const { user, logout } = props;
   const { data, error } = useSWR(
     user ? ['/api/food', user.token]: null,
     fetcher
   );
-
-  console.log("received user:", user);
-  console.log("received logout:", logout);
 
   useEffect(() => {
     setIsMounted(true);
