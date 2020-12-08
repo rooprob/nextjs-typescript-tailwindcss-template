@@ -7,8 +7,10 @@ class MyDocument extends Document {
       <Html>
         <Head />
         <body className="bg-white text-black dark:bg-black dark:text-white">
-          <Main />
-          <NextScript />
+          <main className="container max-w-c1 mx-auto">
+            <Main />
+            <NextScript />
+          </main>
         </body>
       </Html>
     );

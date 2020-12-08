@@ -39,27 +39,25 @@ export default function IndexPage(props: any) {
 
   return (
     <Layout title="Darkmode, Typescript, Tailwind 2.0, Next.js" user={user} logout={logout}>
-      <main className="container max-w-c1 mx-auto">
-        <h1>Darkmode + Next.js + Tailwind CSS</h1>
-        <ul className="markdown">
-          {posts.map((post) => (
-            <li key={post.id}>
-              <h3>
-                <Link href={post.link}>
-                  <a>{post.title}</a>
-                </Link>
-              </h3>
-              <time>{post.time}</time>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: post.content,
-                }}
-              />
-            </li>
-          ))}
-        </ul>
-        <button onClick={switchTheme}>Change theme</button>
-      </main>
+      <h1>Darkmode + Next.js + Tailwind CSS</h1>
+      <ul className="markdown">
+        {posts.map((post) => (
+          <li key={post.id}>
+            <h3>
+              <Link href={post.link}>
+                <a>{post.title}</a>
+              </Link>
+            </h3>
+            <time>{post.time}</time>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: post.content,
+              }}
+            />
+          </li>
+        ))}
+      </ul>
+      <button onClick={switchTheme}>Change theme</button>
     </Layout>
   );
 }
