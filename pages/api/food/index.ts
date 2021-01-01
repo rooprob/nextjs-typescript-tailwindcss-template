@@ -2,13 +2,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { verifyIdToken } from '../../../utils/auth/firebaseAdmin';
 import { sampleFoodData } from '../../../utils/sample-data'
 
-import { AuthUser } from '../../../interfaces'
-import { getUserFromCookie } from '../../../utils/auth/userCookies'
+import { AuthInfo } from '../../../types/auth.types'
+import TokenService from '../../../services/Token.service'
+import { useAuth } from '../../../services/Auth.context'
 
 type Props = {
   _req: NextApiRequest 
   res: NextApiResponse
-  user?: AuthUser,
+  user?: AuthInfo,
   logout?: () => Promise<void>,
 }
 
@@ -19,14 +20,18 @@ const getFood = (_req: NextApiRequest, res: NextApiResponse) => {
     if (!Array.isArray(sampleFoodData)) {
       throw new Error('Cannot find food data')
     }
-    const cookie = getUserFromCookie();
-    console.log(cookie);
-    let token;
-    if (cookie !== undefined) {
+    // Demo code? - put this elsewhere
+
+    // let cookie = {} ;
+    // console.log(cookie);
+
+    let token = _req.headers.token;
+    /*
+    if (cookie !== undefined && cookie.hasOwnProperty('token')) {
       token = cookie.token;
     } else {
       token = _req.headers.token;
-    }
+    }*/
     console.log(token);
     verifyIdToken(token).then(() => {
       console.log("Sending response for food....");

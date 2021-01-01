@@ -1,15 +1,18 @@
+import type { AppProps } from 'next/app'
+import * as React from 'react'
+
+import { AuthProvider } from '../services/Auth.context'
+
 import '../styles/index.css'
 import { ThemeProvider } from 'next-themes';
-import { useUser } from '../utils/auth/useUser';
-
-import type { AppProps /*, AppContext */ } from 'next/app'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { user, logout } = useUser();
   return (
-    <ThemeProvider attribute="class">
-      <Component user={user} logout={logout} { ...pageProps } />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider attribute="class">
+        <Component { ...pageProps } />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

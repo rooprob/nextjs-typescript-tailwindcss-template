@@ -3,20 +3,20 @@ import { useRouter } from 'next/router'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import initFirebase from '../auth/initFirebase'
-import {
-  removeUserCookie,
-  setUserCookie,
-  getUserFromCookie,
-} from './userCookies'
 import { mapUserData } from './mapUserData'
 
-import { AuthUser } from '../../interfaces'
+import { AuthInfo } from '../../types/auth.types'
 import { User } from '@firebase/auth-types'
+import TokenService from '../../services/Token.service'
+import { useAuth, ActionType } from '../../services/Auth.context'
 
 initFirebase()
 
 const useUser = () => {
-  const [user, setUser] = useState<AuthUser>()
+  const [user, setUser] = useState<AuthInfo>()
+  const [ authState, authDispatch ] = useAuth();
+  const tokenService = new TokenService();
+
   const router = useRouter()
 
   const logout = async () => {
@@ -24,6 +24,10 @@ const useUser = () => {
       .auth()
       .signOut()
       .then(() => {
+        tokenService.deleteToken()
+        authDispatch({
+          type: ActionType.RemoveDetails
+        })
         // Sign-out successful.
         router.push('/signedout')
       })
@@ -40,17 +44,24 @@ const useUser = () => {
       (user: User | null) => {
         if (user) {
           mapUserData(user).then((userData) => {
-            setUserCookie(userData);
+            tokenService.saveToken(userData);
+            authDispatch({
+              type: ActionType.SetDetails,
+              payload: userData
+            });
             setUser(userData);
           })
         } else {
-          removeUserCookie();
+          tokenService.deleteToken();
+          authDispatch({
+            type: ActionType.RemoveDetails
+          });
           setUser(undefined);
         }
       }
     );
 
-    const userFromCookie = getUserFromCookie()
+    const userFromCookie = tokenService.getToken();
     if (!userFromCookie) {
       router.push('/')
       return

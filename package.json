@@ -12,13 +12,15 @@
     "firebase": "^8.1.2",
     "firebase-admin": "^9.4.1",
     "firebaseui": "^4.7.1",
+    "isomorphic-unfetch": "^3.1.0",
     "js-cookie": "^2.2.1",
     "next": "^10.0.3",
     "next-themes": "^0.0.10",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-firebaseui": "^4.1.0",
-    "swr": "^0.3.9"
+    "swr": "^0.3.9",
+    "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
     "@firebase/auth-types": "^0.10.1",

@@ -1,12 +1,13 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 
-import { AuthUser, User } from '../../interfaces'
+import { AuthInfo } from '../../types/auth.types'
+import { User } from '../../types/model.types'
 import { sampleUserData } from '../../utils/sample-data'
 import Layout from '../../components/Layout'
 import ListDetail from '../../components/ListUserDetail'
 
 type Props = {
-  user?: AuthUser,
+  user?: AuthInfo,
   logout?: any,
   item?: User
   errors?: string

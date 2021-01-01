@@ -2,8 +2,8 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import initFirebase from '../utils/auth/initFirebase'
-import { setUserCookie } from '../utils/auth/userCookies'
 import { mapUserData } from '../utils/auth/mapUserData'
+import TokenService from '../services/Token.service'
 
 // Init the Firebase app.
 initFirebase()
@@ -23,9 +23,14 @@ const firebaseAuthConfig: firebaseui.auth.Config = {
   callbacks: {
     signInSuccessWithAuthResult: ({ user }: any, redirectUrl: string): boolean => {
         mapUserData(user).then((userData) => {
-            setUserCookie(userData);
+            const tokenService = new TokenService();
+            tokenService.saveToken(userData);
         });
         return true;
+    },
+    signInFailure: (error: firebaseui.auth.AuthUIError): Promise<void> => {
+      console.log("signInFailure", error);
+      return new Promise((resolve) => resolve());
     },
   },
 };
