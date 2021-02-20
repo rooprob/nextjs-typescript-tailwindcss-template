@@ -13,3 +13,7 @@ export interface AuthInfo {
   email: string | null
   token: string
 }
+
+export interface UserInfo {
+  email: string | null
+}

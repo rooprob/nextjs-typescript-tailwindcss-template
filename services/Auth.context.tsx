@@ -1,59 +1,139 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
+import queryString from 'query-string';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
-import { AuthInfo } from '../types/auth.types';
-export const AuthStateContext = React.createContext({});
+import { AuthInfo } from "../types/auth.types";
+import { mapUserAuthInfo } from '../utils/auth/mapUserAuthInfo';
+import TokenService from './Token.service'
 
-const initialState: AuthInfo = { email: '', id: '', token: '' };
-
-export enum ActionType {
-	SetDetails = 'setAuthDetails',
-	RemoveDetails = 'removeAuthDetails'
-}
-
-export interface Action {
-	type: ActionType;
-	payload: AuthInfo;
-}
-
-const reducer: React.Reducer<{}, Action> = (state, action) => {
-	switch (action.type) {
-		case ActionType.SetDetails:
-			return {
-				id: action.payload.id,
-				email: action.payload.email,
-				token: action.payload.token
-			};
-		case ActionType.RemoveDetails:
-			return {
-				id: initialState.id,
-				email: initialState.email,
-				token: initialState.token
-			};
-		default:
-			throw new Error(`Unhandled action type: ${action.type}`);
-	}
+const config = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
 };
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(config);
+}
+
+const AuthStateContext = createContext({});
 
 export const AuthProvider = ({ children }: any) => {
-	let localState = null;
-	if (typeof localStorage !== 'undefined' && localStorage.getItem('userInfo')) {
-		localState = JSON.parse(localStorage.getItem('userInfo') || '');
-	}
-	const [state, dispatch] = useReducer(reducer, localState || initialState);
-
-	if (typeof localStorage !== 'undefined') {
-		useEffect(() => {
-			localStorage.setItem('userInfo', JSON.stringify(state));
-		}, [state]);
-	}
-	return (
-		<AuthStateContext.Provider value={[state, dispatch]}>
-			{children}
-		</AuthStateContext.Provider>
-	);
+  const auth = useProvideAuth();
+  return (
+    <AuthStateContext.Provider value={auth}>
+      {children}
+    </AuthStateContext.Provider>
+  );
 };
 
-// useContext hook - export here to keep code for global auth state
-// together in this file, allowing user info to be accessed and updated
-// in any functional component using the hook
 export const useAuth: any = () => useContext(AuthStateContext);
+
+const useProvideAuth = () => {
+  const [user, setUser] = useState<AuthInfo>();
+  const tokenService = new TokenService();
+
+  const signin = (email: string, password: string): Promise<void | AuthInfo> => {
+    return firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((response) => {
+        if (response.user === null) {
+          tokenService.deleteToken();
+          setUser(undefined);
+          return;
+        }
+        mapUserAuthInfo(response.user).then((authInfo) => {
+          tokenService.saveToken(authInfo);
+          setUser(authInfo);
+          return authInfo;
+        });
+      });
+  };
+
+  const signup = (email: string, password: string): Promise<void | AuthInfo> => {
+    return firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((response) => {
+        if (response.user === null) {
+          tokenService.deleteToken();
+          setUser(undefined);
+          return;
+        }
+        mapUserAuthInfo(response.user).then((authInfo) => {
+          tokenService.saveToken(authInfo);
+          setUser(authInfo);
+          return authInfo;
+        });
+      });
+  };
+
+  const signout = () => {
+    return firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        tokenService.deleteToken();
+        setUser(undefined);
+      });
+  };
+
+  const sendPasswordResetEmail = (email: string): Promise<boolean> => {
+    return firebase
+      .auth()
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        return true;
+      });
+  };
+
+  const confirmPasswordReset = (password: string, code: string): Promise<boolean> => {
+    const resetCode: any = code || getFromQueryString("oobCode");
+    if (!resetCode) {
+      return Promise.resolve(false);
+    }
+    return firebase
+      .auth()
+      .confirmPasswordReset(resetCode, password)
+      .then(() => {
+        return true;
+      });
+  };
+
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        mapUserAuthInfo(user).then((authInfo) => {
+          tokenService.saveToken(authInfo);
+          setUser(authInfo);
+        });
+      } else {
+        tokenService.deleteToken();
+      	setUser(undefined);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  return {
+    userId: user && user.id,
+    signin,
+    signup,
+    signout,
+    sendPasswordResetEmail,
+    confirmPasswordReset,
+  };
+};
+
+const getFromQueryString = (key: string) => {
+  return queryString.parse(window.location.search)[key];
+};	

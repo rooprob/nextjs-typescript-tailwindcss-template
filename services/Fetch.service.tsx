@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-unfetch';
 
-import Cookies from 'universal-cookie';
+import TokenService from './Token.service';
+
 
 class FetchService {
   public isofetch(url: string, data: object, type: string): Promise<any> {
@@ -34,8 +35,9 @@ class FetchService {
     type: string,
     ssr: boolean = false
   ): Promise<any> {
-    const cookies = new Cookies();
-    const token = cookies.get('token');
+    const tokenService = new TokenService();
+    const token = tokenService.getToken();
+    console.log("cookie fetch: ", token)
 
     return fetch(
       `${ssr ? process.env.NEXT_PUBLIC_NETWORK_API_URL : process.env.NEXT_PUBLIC_API_URL}${url}`,

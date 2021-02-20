@@ -2,9 +2,8 @@ import Link from 'next/link'
 import Layout from '../components/Layout'
 
 const FoodPage = (props: any) => {
-  const { user, logout } = props;
   return (
-    <Layout title="Food | Next.js + TypeScript Example" user={user} logout={logout}>
+    <Layout title="Food | Next.js + TypeScript Example">
       <h1>Food</h1>
       <p>This is the food page</p>
       <p>

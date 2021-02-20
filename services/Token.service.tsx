@@ -1,32 +1,38 @@
-import { NextPageContext } from 'next/types';
+import { GetStaticPropsContext, NextPageContext } from 'next/types';
 
 import { AuthInfo } from '../types/auth.types';
 import Cookies from 'universal-cookie';
 
 import FetchService from '../services/Fetch.service';
 import NavService from '../services/Nav.service';
+import { ParsedUrlQuery } from 'querystring';
 
 class TokenService {
   public saveToken(user: AuthInfo) {
     const cookies = new Cookies();
-    cookies.set('auth', user, { path: '/' });
+    cookies.set("auth", user, { path: "/" });
     return Promise.resolve();
   }
 
   public deleteToken() {
     const cookies = new Cookies();
-    cookies.remove('auth', { path: '/' });
+    cookies.remove("auth", { path: "/" });
     return;
   }
 
   public getToken(): AuthInfo {
     const cookies = new Cookies();
-    return cookies.get('auth');
+    return cookies.get("auth");
   }
 
   public checkAuthToken(user: AuthInfo, ssr: boolean): Promise<any> {
-    console.log(`checkAuthToken for user: ${user}, ssr ${ssr}`);
-    return FetchService.isofetchAuthed(`/auth/validate`, { user }, 'POST', ssr);
+    console.log(`checkAuthToken for ssr ${ssr}`, user);
+    return FetchService.isofetchAuthed(
+      `/api/auth/validate`,
+      { user },
+      "POST",
+      ssr
+    );
   }
 
   /**
@@ -37,14 +43,17 @@ class TokenService {
    * @param ctx
    */
   public async authenticateTokenSsr(ctx: NextPageContext) {
+    console.log("calling authenticaTokenSsr");
+    console.log(ctx);
 
     const ssr = ctx.req ? true : false;
     // @ts-ignore: ts(2532)
     const cookies = new Cookies(ssr ? ctx.req.headers.cookie : null);
-    const cookie = cookies.get('auth');
+    const cookie = cookies.get("auth");
 
     const response = await this.checkAuthToken(cookie, ssr);
     if (!response.success) {
+      console.log("validation failed, redirecting")
       const navService = new NavService();
       this.deleteToken();
       navService.redirectUser('/?l=t', ctx);

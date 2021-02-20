@@ -1,63 +1,66 @@
-import Link from 'next/link'
+import {Box, Flex, Heading, Text, Button} from '@chakra-ui/react';
+import NextLink from 'next/link';
 
-import { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
-import Layout from '../components/Layout';
+import {withSignInRedirect} from '../components/Auth';
+import Logo from '../components/Logo';
 
-import useSWR from 'swr';
+export const Container = (props: any) => <Box width="full" maxWidth="1280px" mx="auto" px={6} {...props} />;
 
-const posts = [
-  { id: 1, link: '/posts/first-post', title: 'this page', time: '2020-10-23 20:33:00', content: 'first post' },
-  { id: 2, link: '/posts/second-post', title: 'second page', time: '2020-10-23 20:33:00', content: 'second post' }
-]
+const Header = ({ onSignIn }: any) => (
+  <Box as="header" width="full" height="4rem">
+    <Box width="full" mx="auto" px={6} pr={[1, 6]} height="100%">
+      <Flex
+        size="100%"
+        p={[0, 6]}
+        pl={[0, 4]}
+        align="center"
+        justify="space-between"
+      >
+        <Box as="a" d="block" href="/" aria-label="daydrink, Back to homepage">
+          <Logo w="100px" />
+        </Box>
+        <Flex align="center">
+          <Button onClick={onSignIn} variant="ghost">
+            {"Sign In"}
+          </Button>
+          <NextLink href="/deals" passHref>
+            <Button as="a">{"Find Deals"}</Button>
+          </NextLink>
+        </Flex>
+      </Flex>
+    </Box>
+  </Box>
+);
 
-const fetcher = (url: string, token: string) =>
-  fetch(url, {
-    method: 'GET',
-    headers: new Headers({'Context-Type': 'application/json', token}),
-    credentials: 'same-origin',
-  }).then((res) => res.json());
-
-export default function IndexPage(props: any) {
-  const [isMounted, setIsMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const { user, logout } = props;
-  const { data, error } = useSWR(
-    user ? ['/api/food', user.token]: null,
-    fetcher
-  );
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const switchTheme = () => {
-    if (isMounted) {
-      setTheme(theme === "light" ? "dark" : "light");
-    }
-  };
-
+const HomePage = ({ onSignIn }: any) => {
   return (
-    <Layout title="Darkmode, Typescript, Tailwind 2.0, Next.js" user={user} logout={logout}>
-      <h1>Darkmode + Next.js + Tailwind CSS</h1>
-      <ul className="markdown">
-        {posts.map((post) => (
-          <li key={post.id}>
-            <h3>
-              <Link href={post.link}>
-                <a>{post.title}</a>
-              </Link>
-            </h3>
-            <time>{post.time}</time>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: post.content,
-              }}
-            />
-          </li>
-        ))}
-      </ul>
-      <button onClick={switchTheme}>Change theme</button>
-    </Layout>
+    <Box h="100vh">
+      <Header onSignIn={onSignIn} />
+      <Box as="section" pt={40} pb={24}>
+        <Container>
+          <Box maxW="xl" mx="auto" textAlign="center">
+            <Heading as="h1" size="xl" fontWeight="black">
+              Find the cheapest drinks deals happening right now.
+            </Heading>
+
+            <Text opacity="0.7" fontSize="lg" mt="6">
+              daydrink helps you find the best drink deals and happy hours in
+              your area. View the cheapest drinks for the day and filter down to
+              exactly what you're searching for.
+            </Text>
+
+            <Box mt="6">
+              <NextLink href="/signup" passHref>
+                <Button size="lg" as="a" colorScheme="teal">
+                  Let's Get Started
+                </Button>
+              </NextLink>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+    </Box>
   );
-}
+};
+
+export default withSignInRedirect(HomePage);

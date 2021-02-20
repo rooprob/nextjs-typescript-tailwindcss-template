@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { verifyIdToken } from '../../../utils/auth/firebaseAdmin';
+import { verifyIdToken } from '../../../utils/auth/verifyIdToken';
 import { sampleFoodData } from '../../../utils/sample-data'
 
 import { AuthInfo } from '../../../types/auth.types'

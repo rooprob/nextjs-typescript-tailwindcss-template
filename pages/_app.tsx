@@ -1,19 +1,24 @@
+import { ChakraProvider } from "@chakra-ui/react"
+
+import {DefaultSeo} from 'next-seo';
+import seo from '../seo.config';
+import {AuthProvider} from '../services/Auth.context';
+import {SearchProvider} from '../services/Search.context';
+
 import type { AppProps } from 'next/app'
 import * as React from 'react'
-
-import { AuthProvider } from '../services/Auth.context'
-
-import '../styles/index.css'
-import { ThemeProvider } from 'next-themes';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <ThemeProvider attribute="class">
-        <Component { ...pageProps } />
-      </ThemeProvider>
+      <ChakraProvider>
+        <SearchProvider>
+          <DefaultSeo {...seo} />
+          <Component {...pageProps} />
+        </SearchProvider>
+      </ChakraProvider>
     </AuthProvider>
   );
-}
+};
 
-export default MyApp
+export default MyApp;

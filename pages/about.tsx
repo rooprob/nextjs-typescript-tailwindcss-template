@@ -3,7 +3,7 @@ import Layout from '../components/Layout'
 
 const AboutPage = (props: any) => {
     return (
-    <Layout title="About | Next.js + TypeScript Example" user={props.user} logout={props.logout}>
+    <Layout title="About | Next.js + TypeScript Example">
       <h1>About</h1>
       <p>This is the about page</p>
       <p>
