@@ -55,7 +55,7 @@ const AuthContent = ({ register, errors, type, ...rest }: any) => (
       />
       <FormErrorMessage>{errors.pass && errors.pass.message}</FormErrorMessage>
     </FormControl>
-    <Button type="submit" mt={4} variantColor="teal" variant="solid">
+    <Button type="submit" mt={4} variantcolor="teal" variant="solid">
       {type}
     </Button>
   </Stack>
@@ -93,7 +93,7 @@ const AuthModal = ({ isOpen, onClose, type, onSubmit }: any) => {
   const { handleSubmit, register, errors } = useForm();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="400px">
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent borderRadius={4}>
         <ModalCloseButton />
@@ -181,6 +181,30 @@ export const withSignInRedirect = (Component: any) => (props: any) => {
       });
   };
 
+  const signOut = () => {
+    auth
+    .signout()
+    .then(() => {
+      router.push("/");
+      toast({
+        title: "Signed out.",
+        description: "See you next time :)",
+        status: "info",
+        duration: 9000,
+        isClosable: true,
+      });
+    })
+    .catch((error: any) => {
+      toast({
+        title: "An error occurred.",
+        description: error.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    });
+  };
+
   return (
     <>
       <AuthModal
@@ -189,7 +213,7 @@ export const withSignInRedirect = (Component: any) => (props: any) => {
         type="Sign In"
         onSubmit={signIn}
       />
-      <Component onSignIn={onOpen} {...props} />
+      <Component onSignIn={onOpen} onSignOut={signOut} {...props} />
     </>
   );
 };

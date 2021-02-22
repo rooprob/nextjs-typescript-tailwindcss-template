@@ -126,6 +126,7 @@ const useProvideAuth = () => {
 
   return {
     userId: user && user.id,
+    user: user,
     signin,
     signup,
     signout,
