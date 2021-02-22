@@ -46,8 +46,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 };
 
 const useAuthProvider = () => {
-  const [user, setUser] = useState<AuthInfo>();
   const tokenService = new TokenService();
+  const [user, setUser] = useState<AuthInfo | undefined>(tokenService.getToken());
 
   const signin = (email: string, password: string): Promise<void | AuthInfo> => {
     return firebase
@@ -132,9 +132,6 @@ const useAuthProvider = () => {
 
     return () => unsubscribe();
   }, []);
-
-  console.log(`I'm in Auth, user is`);
-  console.log(user);
 
   return {
     userId: user && user.id,
