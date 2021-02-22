@@ -17,6 +17,7 @@ interface Deals {
 
 const DealsPage = () => {
     const {userId} = useAuth();
+    console.log(userId);
     const {search} = useSearch();
     const {dayOfWeek, alcoholTypeFilter} = useAlcoholFilter();
     // const {data, loading} = useDeals(dayOfWeek);

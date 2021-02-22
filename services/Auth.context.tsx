@@ -8,7 +8,7 @@ import queryString from 'query-string';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
-import { AuthInfo } from "../types/auth.types";
+import { AuthInfo, AuthStateContextType } from "../types/auth.types";
 import { mapUserAuthInfo } from '../utils/auth/mapUserAuthInfo';
 import TokenService from './Token.service'
 
@@ -23,10 +23,21 @@ if (!firebase.apps.length) {
   firebase.initializeApp(config);
 }
 
-const AuthStateContext = createContext({});
+export const AuthStateContext = createContext<AuthStateContextType>({
+  userId: undefined,
+  user: undefined,
+  signin: (email, password) => console.warn('void'),
+  signup: (email, password) =>  console.warn('void'),
+  signout: () => console.warn('void'),
+  sendPasswordResetEmail: (email) => console.warn('void'),
+  confirmPasswordReset: (password, code) => console.warn('void'),
+});
+export const useAuth: any = () => useContext(AuthStateContext);
 
-export const AuthProvider = ({ children }: any) => {
-  const auth = useProvideAuth();
+type AuthProviderProps = {};
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const auth = useAuthProvider();
   return (
     <AuthStateContext.Provider value={auth}>
       {children}
@@ -34,9 +45,7 @@ export const AuthProvider = ({ children }: any) => {
   );
 };
 
-export const useAuth: any = () => useContext(AuthStateContext);
-
-const useProvideAuth = () => {
+const useAuthProvider = () => {
   const [user, setUser] = useState<AuthInfo>();
   const tokenService = new TokenService();
 
@@ -123,6 +132,9 @@ const useProvideAuth = () => {
 
     return () => unsubscribe();
   }, []);
+
+  console.log(`I'm in Auth, user is`);
+  console.log(user);
 
   return {
     userId: user && user.id,
