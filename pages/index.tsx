@@ -3,13 +3,13 @@ import NextLink from 'next/link';
 
 import {withSignInRedirect} from '../components/Auth';
 import Logo from '../components/Logo';
-import { useAuth } from '../services/Auth.context';
+import { useAuth, useIsAuthenticated } from '../services/Auth.context';
 
 export const Container = (props: any) => <Box width="full" maxWidth="1280px" mx="auto" px={6} {...props} />;
 
 const Header = ({ onSignIn, onSignOut }: any) => {
 
-  const { user } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
 
   return(
     <Box as="header" width="full" height="4rem">
@@ -25,7 +25,7 @@ const Header = ({ onSignIn, onSignOut }: any) => {
             <Logo w="100px" />
           </Box>
           <Flex align="center">
-            { user ? (
+            { isAuthenticated ? (
               <Button onClick={onSignOut} variant="ghost">
                 {"Sign Out"}
               </Button>

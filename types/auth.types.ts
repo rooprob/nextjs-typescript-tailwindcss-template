@@ -9,9 +9,9 @@ export interface LoginIn {
   password: string
 }
 export interface AuthInfo {
-  id: string
+  id: string 
   email: string | null
-  token: string
+  token: string 
 }
 
 export interface UserInfo {
@@ -19,6 +19,10 @@ export interface UserInfo {
 }
 
 export interface AuthStateContextType {
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+
   userId: string | undefined;
   user: AuthInfo | undefined;
   signin: (email: string, password: string) => void;

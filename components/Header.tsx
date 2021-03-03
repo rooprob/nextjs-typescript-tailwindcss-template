@@ -7,6 +7,8 @@ import MobileNav from './MobileNav';
 import Logo from './Logo';
 import { AlcoholContextType, SearchContextType } from '../types/global.types';
 
+import { useIsAuthenticated } from '../services/Auth.context';
+
 // refactor out to keyboard shortcuts
 const useKeyPress = (targetKey: string) => {
     const [keyPressed, setKeyPressed] = useState(false);
@@ -46,6 +48,8 @@ type HeaderProps = {
 };
 
 const Header = (props: HeaderProps) => {
+    const isAuthenticated = useIsAuthenticated();
+
     const {searchBox, alcoholFilter, ...rest} = props;
 
     const {colorMode, toggleColorMode} = useColorMode();

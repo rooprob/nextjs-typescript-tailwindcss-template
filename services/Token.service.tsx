@@ -10,7 +10,7 @@ import { ParsedUrlQuery } from 'querystring';
 class TokenService {
   public saveToken(user: AuthInfo) {
     const cookies = new Cookies();
-    cookies.set("auth", user, { path: "/" });
+    cookies.set("auth", user, { path: "/", httpOnly: true });
     return Promise.resolve();
   }
 

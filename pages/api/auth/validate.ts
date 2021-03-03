@@ -1,7 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { verifyIdToken } from '../../../utils/auth/verifyIdToken';
+//import { verifyIdToken } from '../../../utils/auth/verifyIdToken';
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.headers.cookie && req.headers.cookie.includes('auth')) {
+    console.log(req.headers.cookie);
+    res.status(200);
+  } else {
+    res.status(401);
+  }
+  res.end();
+/*
   try {
     let token = req.headers.authorization;
     token = token && token.replace('bearer ', '');
@@ -14,6 +22,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   } catch (err) {
     res.status(401).json({ statusCode: 401, message: err.message });
   }
+  */
 };
 
 export default handler;

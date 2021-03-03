@@ -3,6 +3,9 @@ import React, {
   useContext,
   useState,
   useEffect,
+  ReactNode,
+  ReactChild,
+  ReactElement,
 } from 'react';
 import queryString from 'query-string';
 import firebase from 'firebase/app';
@@ -10,7 +13,7 @@ import 'firebase/auth';
 
 import { AuthInfo, AuthStateContextType } from "../types/auth.types";
 import { mapUserAuthInfo } from '../utils/auth/mapUserAuthInfo';
-import TokenService from './Token.service'
+import LocalTokenService from './LocalToken.service';
 
 const config = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY,
@@ -24,6 +27,9 @@ if (!firebase.apps.length) {
 }
 
 export const AuthStateContext = createContext<AuthStateContextType>({
+  isAuthenticated: false,
+  isLoading: true,
+  setAuthenticated: () => {},
   userId: undefined,
   user: undefined,
   signin: (email, password) => console.warn('void'),
@@ -32,11 +38,25 @@ export const AuthStateContext = createContext<AuthStateContextType>({
   sendPasswordResetEmail: (email) => console.warn('void'),
   confirmPasswordReset: (password, code) => console.warn('void'),
 });
-export const useAuth: any = () => useContext(AuthStateContext);
 
-type AuthProviderProps = {};
+export const useAuth = ():AuthStateContextType => {
+  const context = useContext(AuthStateContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const useIsAuthenticated = ():boolean => {
+  const context = useAuth();
+  return context.isAuthenticated;
+}
+
+export const AuthProvider = ({
+  children
+}: {
+  children: ReactNode
+}): ReactElement => {
   const auth = useAuthProvider();
   return (
     <AuthStateContext.Provider value={auth}>
@@ -45,10 +65,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
-const useAuthProvider = () => {
-  const tokenService = new TokenService();
-  const [user, setUser] = useState<AuthInfo | undefined>(tokenService.getToken());
+const useAuthProvider = (): AuthStateContextType => {
+  const tokenService = new LocalTokenService();
 
+  const [isAuthenticated, setAuthenticated] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<AuthInfo | undefined>(undefined);
   const signin = (email: string, password: string): Promise<void | AuthInfo> => {
     return firebase
       .auth()
@@ -121,19 +143,22 @@ const useAuthProvider = () => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         mapUserAuthInfo(user).then((authInfo) => {
-          tokenService.saveToken(authInfo);
+          setAuthenticated(true);
+          setLoading(false);
           setUser(authInfo);
         });
       } else {
-        tokenService.deleteToken();
+        setAuthenticated(false);
       	setUser(undefined);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
   return {
+    isAuthenticated: isAuthenticated,
+    isLoading: isLoading,
+    setAuthenticated: setAuthenticated,
     userId: user && user.id,
     user: user,
     signin,
