@@ -1,23 +1,23 @@
 const SEO = {
-    title: 'galatos | The best msuic venue in Auckland.',
-    description: 'The best music in Auckland.',
+    title: 'gelasot | The best ????? venue in Lapland.',
+    description: 'The best music in Lapland.',
     openGraph: {
-        url: 'https://galatos.co.nz',
-        title: 'galatos',
-        description: 'The best msuci in Auckland',
+        url: 'https://gelasot.co.nz',
+        title: 'gelasot',
+        description: 'The best msuci in Lapland',
         images: [
             {
-                url: 'https://galatos.co.nz/images/banner.png',
+                url: 'https://gelasot.co.nz/images/banner.png',
                 width: 1200,
                 height: 630,
-		alt: 'galatos | The best msuic venue in Auckland.',
+		alt: 'gelasot | The best ????? venue in Lapland.',
             }
         ],
-        site_name: 'galatos'
+        site_name: 'gelasot'
     },
     twitter: {
-        handle: '@galatos',
-        site: '@galatos',
+        handle: '@gelasot',
+        site: '@gelasot',
         cardType: 'summary_large_image'
     }
 };
