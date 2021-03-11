@@ -1,6 +1,4 @@
-/** @jsx jsx */
-import {useColorMode, Box} from '@chakra-ui/core';
-import {jsx} from '@emotion/core';
+import {useColorMode, Box} from '@chakra-ui/react';
 
 const Location = (props) => {
     const {colorMode} = useColorMode();

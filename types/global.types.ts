@@ -45,3 +45,20 @@ export type DealCardProps = {
   description: string,
   alcoholType: AlcoholType
 };
+
+export type BarCardProps = {
+    name: string,
+    address: string,
+    deals: object[],
+    imageUrl: string,
+};
+
+export type LocationCardProps = {
+  id: string,
+  daysActive: any[],
+  location: any,
+  score: number,
+  userBars: any,
+  description: string,
+  alcoholType: AlcoholType
+};

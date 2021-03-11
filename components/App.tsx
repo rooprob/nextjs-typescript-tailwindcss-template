@@ -5,14 +5,14 @@ import {useAlcoholFilter} from '../services/Alcohol.context';
 import SideNav from '../components/SideNav';
 import Header from '../components/Header';
 
-const App = ({children, ...rest}: any) => {
+const App = ({email, signOut, children, ...rest}: any) => {
     const {colorMode} = useColorMode();
     const searchBox = useSearch();
     const alcoholFilter = useAlcoholFilter();
 
     return (
         <>
-            <Header searchBox={searchBox} alcoholFilter={alcoholFilter} />
+            <Header email={email} signOut={signOut} searchBox={searchBox} alcoholFilter={alcoholFilter} />
             <Box>
                 <SideNav display={['none', null, 'block']} maxWidth="18rem" width="full" />
                 <Box pl={[0, null, '18rem']} mt="4rem">

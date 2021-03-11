@@ -7,8 +7,6 @@ import MobileNav from './MobileNav';
 import Logo from './Logo';
 import { AlcoholContextType, SearchContextType } from '../types/global.types';
 
-import { useIsAuthenticated } from '../services/Auth.context';
-
 // refactor out to keyboard shortcuts
 const useKeyPress = (targetKey: string) => {
     const [keyPressed, setKeyPressed] = useState(false);
@@ -43,14 +41,15 @@ const useKeyPress = (targetKey: string) => {
 };
 
 type HeaderProps = {
-  searchBox: SearchContextType,
-  alcoholFilter: AlcoholContextType,
+  email: string;
+  signOut: any;
+  searchBox: SearchContextType;
+  alcoholFilter: AlcoholContextType;
 };
 
 const Header = (props: HeaderProps) => {
-    const isAuthenticated = useIsAuthenticated();
 
-    const {searchBox, alcoholFilter, ...rest} = props;
+    const {email, signOut, searchBox, alcoholFilter, ...rest} = props;
 
     const {colorMode, toggleColorMode} = useColorMode();
     const bg = {light: 'white', dark: 'gray.800'};
@@ -72,7 +71,7 @@ const Header = (props: HeaderProps) => {
             bg={bg[colorMode]}
             left="0"
             right="0"
-            borderBottomWidth="1px"
+            borderBottomWidth="0px"
             width="full"
             height="4rem"
             {...rest}
@@ -80,7 +79,7 @@ const Header = (props: HeaderProps) => {
             <Box width="full" mx="auto" px={6} pr={[1, 6]} height="100%">
                 <Flex size="100%" p={[0, 6]} pl={[0, 4]} align="center" justify="space-between">
                     <Box as="a" d="block" href="/" aria-label="daydrink, Back to homepage">
-                        <Logo w="100px" />
+                        <Logo w="100%" h="100px"/>
                     </Box>
                     <InputGroup display={(slashPress ?  'block': 'none')} width="100%" ml={16} mr={16}>
                         <InputLeftElement children={<Icon name="search" color="gray.500" />} />
@@ -88,7 +87,7 @@ const Header = (props: HeaderProps) => {
                             type="text"
                             onChange={searchBox.onSearch}
                             value={searchBox.search}
-                            ref={inputElement} 
+                            ref={inputElement}
                             autoFocus={slashPress}
                             placeholder={`Search for deals (Press "/" to focus)`}
                             bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
@@ -105,7 +104,7 @@ const Header = (props: HeaderProps) => {
                             onClick={toggleColorMode}
                             icon={colorMode === 'light' ? <CgDarkMode /> : <VscColorMode />}
                         />
-                        {!slashPress && <MobileNav />}
+                        {!slashPress && <MobileNav email={email} signOut={signOut} />}
                     </Flex>
                 </Flex>
             </Box>

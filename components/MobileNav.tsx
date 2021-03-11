@@ -29,7 +29,13 @@ const useRouteChanged = (callback:any) => {
   }, [router.events, callback]);
 };
 
-const MobileNav = () => {
+const MobileNav = ({
+  email, 
+  signOut
+}:{ 
+  email:string,
+  signOut:any
+}) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
 
   useRouteChanged(onClose);

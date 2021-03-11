@@ -1,54 +1,21 @@
+import {
+  useAuthUser,
+  withAuthUser,
+  withAuthUserTokenSSR
+} from 'next-firebase-auth'
+import IndexHeader from '../components/IndexHeader';
+
 import {Box, Flex, Heading, Text, Button} from '@chakra-ui/react';
 import NextLink from 'next/link';
 
-import {withSignInRedirect} from '../components/Auth';
-import Logo from '../components/Logo';
-import { useAuth, useIsAuthenticated } from '../services/Auth.context';
-
 export const Container = (props: any) => <Box width="full" maxWidth="1280px" mx="auto" px={6} {...props} />;
 
-const Header = ({ onSignIn, onSignOut }: any) => {
+const HomePage = () => {
+  const AuthUser = useAuthUser()
 
-  const isAuthenticated = useIsAuthenticated();
-
-  return(
-    <Box as="header" width="full" height="4rem">
-      <Box width="full" mx="auto" px={6} pr={[1, 6]} height="100%">
-        <Flex
-          size="100%"
-          p={[0, 6]}
-          pl={[0, 4]}
-          align="center"
-          justify="space-between"
-        >
-          <Box as="a" d="block" href="/" aria-label="daydrink, Back to homepage">
-            <Logo w="100px" />
-          </Box>
-          <Flex align="center">
-            { isAuthenticated ? (
-              <Button onClick={onSignOut} variant="ghost">
-                {"Sign Out"}
-              </Button>
-            ) : (
-              <Button onClick={onSignIn} variant="ghost">
-                {"Sign In"}
-              </Button>
-            )
-            }
-            <NextLink href="/deals" passHref>
-              <Button as="a">{"Find Deals"}</Button>
-            </NextLink>
-          </Flex>
-        </Flex>
-      </Box>
-    </Box>
-  );
-}
-
-const HomePage = ({ onSignIn, onSignOut }: any) => {
   return (
     <Box h="100vh">
-      <Header onSignIn={onSignIn} onSignOut={onSignOut} />
+      <IndexHeader email={AuthUser.email} onSignOut={AuthUser.signOut} />
       <Box as="section" pt={40} pb={24}>
         <Container>
           <Box maxW="xl" mx="auto" textAlign="center">
@@ -76,4 +43,6 @@ const HomePage = ({ onSignIn, onSignOut }: any) => {
   );
 };
 
-export default withSignInRedirect(HomePage);
+export const getServerSideProps = withAuthUserTokenSSR()()
+
+export default withAuthUser()(HomePage);

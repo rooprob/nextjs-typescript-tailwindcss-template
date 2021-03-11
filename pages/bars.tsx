@@ -6,70 +6,60 @@ import {
   AuthAction,
 } from 'next-firebase-auth'
 
-//import {useDeals} from '../graphql/hooks';
+//import {useBars} from '../graphql/hooks';
 import {useSearch} from '../services/Search.context';
 import { useAlcoholFilter } from '../services/Alcohol.context';
 // import {withApollo} from '../graphql/apollo';
 import App from '../components/App';
-import DealCard from '../components/DealCard';
-import AddDealModal from '../components/AddDealModal';
+import BarCard from '../components/BarCard';
 import EmptySearch from '../components/EmptySearch';
-import { AlcoholType, DealCardProps } from '../types/global.types';
+import { BarCardProps, LocationCardProps } from '../types/global.types';
 import getAbsoluteURL from '../utils/getAbsoluteURL'
 
-interface Deals {
-    deals: DealCardProps[],
+interface Bars {
+    locations: BarCardProps[],
 }
 
-const DealsPage = ({ emailVerified, favoriteColor }: any) => {
+const BarsPage = ({ emailVerified, favoriteColor }: any) => {
     const AuthUser = useAuthUser();
 
     const { search } = useSearch();
     const { dayOfWeek, alcoholTypeFilter } = useAlcoholFilter();
-    // const {data, loading} = useDeals(dayOfWeek);
+    // const {data, loading} = useBars(dayOfWeek);
     var startDate = new Date();
     startDate.setDate(startDate.getDate() - 2);
     var endDate = new Date();
     endDate.setDate(endDate.getDate() + 45);
 
-    const data: Deals = {
-        deals: [
-            { id: "42", description: "Really big beer night out", alcoholType: "BEER", daysActive: [startDate, endDate], location: [-123,72], score: 4, userDeals: "win" },
-            { id: "43", description: "Really big wine night out", alcoholType: "WINE", daysActive: [startDate, endDate], location: [-123,72], score: 2, userDeals: "win" },
-            { id: "44", description: "Really big food night out", alcoholType: "FOOD", daysActive: [startDate, endDate], location: [-123,72], score: 1, userDeals: "win" },
+    const data: Bars = {
+        locations: [
+            { name: "foobar", address: "nowhere", deals:[], imageUrl: "" },
         ]
     };
     const loading = false;
 
-    const matchesSearch = (deal: DealCardProps) => deal.description.toLowerCase().includes(search.toLowerCase());
-    const matchesAlcoholType = (deal: DealCardProps) => alcoholTypeFilter.includes(deal.alcoholType);
-    const allDeals = data ? data.deals : [];
-    const filteredDeals = allDeals.filter(matchesSearch).filter(matchesAlcoholType);
+    const matchesSearch = (location : BarCardProps) => location.name.toLowerCase().includes(search.toLowerCase());
+    const allLocations = data ? data.locations : [];
+    const filteredLocations = allLocations.filter(matchesSearch);
 
     return (
         <App email={AuthUser.email} signOut={AuthUser.signOut} width="full" maxWidth="1280px" mx="auto" px={6} py={6}>
-            <Text mb={2} fontSize="sm">
-                {'Active '}
-                <b>{dayOfWeek}</b>
-                {' in '}
-                <b>{'Des Moines'}</b>
+            <Text mb={2} fontWeight="bold" fontSize="sm">
+                {'Open Now'}
             </Text>
             {loading ? (
                 <Flex pt={24} align="center" justify="center">
-                    <Spinner size="xl" label="Loading Deals" />
+                    <Spinner size="xl" label="Loading Bars" />
                 </Flex>
             ) : (
                 <>
-                    {filteredDeals.length ? (
-                        filteredDeals.map((deal) => <DealCard key={deal.id} {...deal} />)
+                    {filteredLocations.length ? (
+                        filteredLocations.map((bar) => <BarCard key={bar.name} {...bar} />)
                     ) : (
                         <EmptySearch />
                     )}
                     <Flex justify="flex-end" as="i" color="gray.500">
-                        {`Showing ${filteredDeals.length} out of ${allDeals.length} deals in Des Moines`}
-                    </Flex>
-                    <Flex mt={8} display={['block', 'none', 'none', 'none']}>
-                        <AddDealModal />
+                        {`Showing ${filteredLocations.length} out of ${allLocations.length} deals in Des Moines`}
                     </Flex>
                 </>
             )}
@@ -107,10 +97,9 @@ export const getServerSideProps = withAuthUserTokenSSR({
   // we perform a custom redirect to the login page and inject query parameters
   // that the login page must handle.
   if (!AuthUser.emailVerified) {
-    console.log("User hasn't validated their email yet");
     return {
       redirect: {
-        destination: `/verify?verifyEmail=true&thenGoToPage=${encodeURIComponent(
+        destination: `/auth?verifyEmail=true&thenGoToPage=${encodeURIComponent(
           ctx.resolvedUrl
         )}`,
         permanent: false,
@@ -147,10 +136,10 @@ export const getServerSideProps = withAuthUserTokenSSR({
   };
 });
 
-export default withAuthUser()(DealsPage)
+export default withAuthUser()(BarsPage)
 
 
 /*
-export default withApollo(DealsPage, {
+export default withApollo(BarsPage, {
     ssr: false
 });*/

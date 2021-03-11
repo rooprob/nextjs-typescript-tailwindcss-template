@@ -1,4 +1,3 @@
-
 import {
     Box,
     Button,
@@ -17,11 +16,13 @@ import {
     useDisclosure,
     useToast
 } from '@chakra-ui/react';
+
 import {useForm} from 'react-hook-form';
 import {useRouter} from 'next/router';
 
 import Logo from '../components/Logo';
-import {useAuth} from '../services/Auth.context';
+
+import firebase from 'firebase/app'
 
 const AuthContent = ({ register, errors, type, ...rest }: any) => (
   <Stack {...rest}>
@@ -119,13 +120,13 @@ const AuthModal = ({ isOpen, onClose, type, onSubmit }: any) => {
 
 export const withAuthModal = (Component: any) => (props: any) => {
     const {isOpen, onOpen, onClose} = useDisclosure();
-    const auth = useAuth();
     const toast = useToast();
 
     const signUp = ({ email, pass }: any) => {
-      auth
-        .signup(email, pass)
-        .then(() => {
+      firebase 
+        .auth()
+        .createUserWithEmailAndPassword(email, pass)
+        .then((response) => {
           toast({
             title: "Success! 🍻",
             description: "Your account has been created.",
@@ -160,14 +161,14 @@ export const withAuthModal = (Component: any) => (props: any) => {
 
 export const withSignInRedirect = (Component: any) => (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const auth = useAuth();
   const toast = useToast();
   const router = useRouter();
 
   const signIn = ({ email, pass }: any) => {
-    auth
-      .signin(email, pass)
-      .then(() => {
+    firebase
+      .auth() 
+      .signInWithEmailAndPassword(email, pass)
+      .then((response) => {
         router.push("/deals");
       })
       .catch((error: any) => {
@@ -182,27 +183,28 @@ export const withSignInRedirect = (Component: any) => (props: any) => {
   };
 
   const signOut = () => {
-    auth
-    .signout()
-    .then(() => {
-      router.push("/");
-      toast({
-        title: "Signed out.",
-        description: "See you next time :)",
-        status: "info",
-        duration: 9000,
-        isClosable: true,
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        router.push("/");
+        toast({
+          title: "Signed out.",
+          description: "See you next time :)",
+          status: "info",
+          duration: 9000,
+          isClosable: true,
+        });
+      })
+      .catch((error: any) => {
+        toast({
+          title: "An error occurred.",
+          description: error.message,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
       });
-    })
-    .catch((error: any) => {
-      toast({
-        title: "An error occurred.",
-        description: error.message,
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      });
-    });
   };
 
   return (

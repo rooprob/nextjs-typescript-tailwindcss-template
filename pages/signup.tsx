@@ -1,16 +1,19 @@
 import {useToast} from '@chakra-ui/react';
-import {useAuth} from '../services/Auth.context';
+import { withAuthUser, AuthAction } from 'next-firebase-auth'
+
 import Auth from '../components/Auth';
 import {useRouter} from 'next/router';
 
+import firebase from 'firebase/app'
+
 const SignUpPage = () => {
-  const auth = useAuth();
   const toast = useToast();
   const router = useRouter();
 
   const signUp = ({ email, pass }: any) => {
-    auth
-      .signup(email, pass)
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, pass)
       .then(() => {
         toast({
           title: "Success! 🍻",
@@ -35,4 +38,8 @@ const SignUpPage = () => {
   return <Auth type="Sign Up" onSubmit={signUp} />;
 };
 
-export default SignUpPage ;
+export default withAuthUser({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+  whenUnauthedBeforeInit: AuthAction.RETURN_NULL,
+  whenUnauthedAfterInit: AuthAction.RENDER,
+})(SignUpPage);
