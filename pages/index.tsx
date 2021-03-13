@@ -9,6 +9,16 @@ import {Box, Flex, Heading, Text, Button} from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 export const Container = (props: any) => <Box width="full" maxWidth="1280px" mx="auto" px={6} {...props} />;
+export const SignUpButton = (props: any) => <NextLink href="/signup" passHref>
+        <Button size="lg" as="a" colorScheme="teal">
+          Sign up to Get Started
+        </Button>
+      </NextLink>
+export const DealsButton = (props: any) => <NextLink href="/deals" passHref>
+        <Button size="lg" as="a" colorScheme="teal">
+          Deals
+        </Button>
+      </NextLink>
 
 const HomePage = () => {
   const AuthUser = useAuthUser()
@@ -30,11 +40,7 @@ const HomePage = () => {
             </Text>
 
             <Box mt="6">
-              <NextLink href="/signup" passHref>
-                <Button size="lg" as="a" colorScheme="teal">
-                  Sign up to Get Started
-                </Button>
-              </NextLink>
+              { !AuthUser.id ? (<SignUpButton /> ) : ( <DealsButton /> ) }
             </Box>
           </Box>
         </Container>
