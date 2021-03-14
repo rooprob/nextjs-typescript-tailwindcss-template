@@ -1,21 +1,25 @@
 export interface RegisterIn {
-  firstName: string
-  lastName: string
-  email: string
-  password: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 }
 export interface LoginIn {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 export interface AuthInfo {
-  id: string 
-  email: string | null
-  token: string 
+  id: string;
+  email: string | null;
+  token: string;
 }
 
 export interface UserInfo {
-  email: string | null
+  email: string | null;
+}
+export interface User {
+  id: number;
+  name: string | null;
 }
 
 export interface AuthStateContextType {
