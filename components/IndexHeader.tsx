@@ -1,19 +1,21 @@
-import {Box, Flex, Heading, Text, Button} from '@chakra-ui/react';
-import NextLink from 'next/link';
+import { Box, Flex, Heading, Text, Button } from '@chakra-ui/react'
+import NextLink from 'next/link'
+import { ReactElement } from 'react'
 
-import Logo from '../components/Logo';
+import Logo from '../components/Logo'
 
-export const Container = (props: any) => <Box width="full" maxWidth="1280px" mx="auto" px={6} {...props} />;
+export const Container = (props: any) => (
+  <Box width="full" maxWidth="1280px" mx="auto" px={6} {...props} />
+)
 
-const IndexHeader = ({ 
-    email, 
-    onSignOut 
-}:{ 
-    email: string | null
-    onSignOut: any
-}) => {
-
-  return(
+const IndexHeader = ({
+  email,
+  onSignOut,
+}: {
+  email: string | null
+  onSignOut: any
+}): ReactElement => {
+  return (
     <Box as="header" width="full" height="4rem">
       <Box width="full" mx="auto" px={6} pr={[1, 6]} height="100%">
         <Flex
@@ -23,32 +25,34 @@ const IndexHeader = ({
           align="center"
           justify="space-between"
         >
-          <Box as="a" d="block" href="/" aria-label="daydrink, Back to homepage">
+          <Box
+            as="a"
+            d="block"
+            href="/"
+            aria-label="daydrink, Back to homepage"
+          >
             <Logo w="100%" />
           </Box>
           <Flex align="center">
-            { email ? (
+            {email ? (
               <>
                 <p>Signed in as {email}</p>
                 <Button onClick={onSignOut} variant="ghost">
-                  {"Sign Out"}
+                  {'Sign Out'}
                 </Button>
               </>
             ) : (
-              <NextLink href='/auth'>
-                <Button variant="ghost">
-                  {"Sign In"}
-                </Button>
+              <NextLink href="/auth">
+                <Button variant="ghost">{'Sign In'}</Button>
               </NextLink>
-            )
-            }
+            )}
             <NextLink href="/deals" passHref>
-              <Button as="a">{"Find Deals"}</Button>
+              <Button as="a">{'Find Deals'}</Button>
             </NextLink>
           </Flex>
         </Flex>
       </Box>
     </Box>
-  );
+  )
 }
 export default IndexHeader

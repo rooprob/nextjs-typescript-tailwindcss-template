@@ -1,13 +1,13 @@
-import { useColorMode, Stack, Text, Box, Flex } from "@chakra-ui/react";
-import React from "react";
+import { useColorMode, Stack, Text, Box, Flex } from '@chakra-ui/react'
+import React from 'react'
 
-import { ComponentLink } from "./NavLink";
-import AddDealModal from './AddDealModal';
-import Deal from "../icons/Deal";
+import { ComponentLink } from './NavLink'
+import AddDealModal from './AddDealModal'
+import Deal from '../icons/Deal'
 // import Filters from './Filters';
-import Home from "../icons/Home";
-import Map from "../icons/Map";
-import WineGlass from "../icons/WineGlass";
+import Home from '../icons/Home'
+import Map from '../icons/Map'
+import WineGlass from '../icons/WineGlass'
 
 const SideNavLink = ({ href, children, icon }: any) => (
   <ComponentLink href={href}>
@@ -16,31 +16,31 @@ const SideNavLink = ({ href, children, icon }: any) => (
       <Text fontWeight="bold">{children}</Text>
     </Flex>
   </ComponentLink>
-);
+)
 
 const PageLinks = () => (
   <Stack spacing={0} mb={8}>
     <SideNavLink href="/" icon={Home}>
-      {"Home"}
+      {'Home'}
     </SideNavLink>
     <SideNavLink href="/deals" icon={Deal}>
-      {"Deals"}
+      {'Deals'}
     </SideNavLink>
     <SideNavLink href="/bars" icon={WineGlass}>
-      {"Bars"}
+      {'Bars'}
     </SideNavLink>
     <SideNavLink href="/map" icon={Map}>
-      {"Map"}
+      {'Map'}
     </SideNavLink>
   </Stack>
-);
+)
 
 const SideNav = (props: any) => {
-  const { colorMode } = useColorMode();
+  const { colorMode } = useColorMode()
 
   return (
     <Box
-      backgroundColor={colorMode === "light" ? "white" : "gray.800"}
+      backgroundColor={colorMode === 'light' ? 'white' : 'gray.800'}
       position="fixed"
       left="0"
       width="100%"
@@ -68,7 +68,7 @@ const SideNav = (props: any) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default SideNav;
+export default SideNav

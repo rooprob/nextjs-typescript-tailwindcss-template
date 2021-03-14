@@ -1,15 +1,15 @@
-import React from "react";
-import { useColorMode, Box } from "@chakra-ui/react";
+import React, { ReactElement } from 'react'
+import { useColorMode, Box } from '@chakra-ui/react'
 
-import { useSearch } from "../services/Search.context";
-import { useAlcoholFilter } from "../services/Alcohol.context";
-import SideNav from "../components/SideNav";
-import Header from "../components/Header";
+import { useSearch } from '../services/Search.context'
+import { useAlcoholFilter } from '../services/Alcohol.context'
+import SideNav from '../components/SideNav'
+import Header from '../components/Header'
 
-const App = ({ email, signOut, children, ...rest }: any) => {
-  const { colorMode } = useColorMode();
-  const searchBox = useSearch();
-  const alcoholFilter = useAlcoholFilter();
+const App = ({ email, signOut, children, ...rest }: any): ReactElement => {
+  const { colorMode } = useColorMode()
+  const searchBox = useSearch()
+  const alcoholFilter = useAlcoholFilter()
 
   return (
     <>
@@ -21,14 +21,14 @@ const App = ({ email, signOut, children, ...rest }: any) => {
       />
       <Box>
         <SideNav
-          display={["none", null, "block"]}
+          display={['none', null, 'block']}
           maxWidth="18rem"
           width="full"
         />
-        <Box pl={[0, null, "18rem"]} mt="4rem">
+        <Box pl={[0, null, '18rem']} mt="4rem">
           <Box
             as="section"
-            backgroundColor={colorMode === "light" ? "gray.100" : "gray.900"}
+            backgroundColor={colorMode === 'light' ? 'gray.100' : 'gray.900'}
             minHeight="calc(100vh - 4rem)"
           >
             <Box {...rest}>{children}</Box>
@@ -36,7 +36,7 @@ const App = ({ email, signOut, children, ...rest }: any) => {
         </Box>
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App

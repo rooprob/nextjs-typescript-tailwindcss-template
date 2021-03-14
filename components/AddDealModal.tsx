@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from 'react'
 
 import {
   Modal,
@@ -11,14 +11,14 @@ import {
   useDisclosure,
   Box,
   Button,
-} from "@chakra-ui/react";
-import Lorem from "react-lorem-component";
+} from '@chakra-ui/react'
+import Lorem from 'react-lorem-component'
 
-const AddDealModal = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const finalRef = React.useRef();
+const AddDealModal = (): ReactNode => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const finalRef = React.useRef()
 
-  console.log("foo");
+  console.log('foo bar')
   return (
     <>
       <Box ref={finalRef} tabIndex={-1} aria-label="Focus moved to this box">
@@ -46,7 +46,7 @@ const AddDealModal = () => {
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default AddDealModal;
+export default AddDealModal

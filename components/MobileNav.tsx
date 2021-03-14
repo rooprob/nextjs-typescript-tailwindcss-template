@@ -5,40 +5,34 @@ import {
   useDisclosure,
   DrawerOverlay,
   DrawerContent,
-} from "@chakra-ui/react";
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+} from '@chakra-ui/react'
+import React, { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
-import SideNav from "./SideNav";
-import Hamburger from "../icons/Hamburger";
+import SideNav from './SideNav'
+import Hamburger from '../icons/Hamburger'
 
-const useRouteChanged = (callback:any) => {
-  const router = useRouter();
+const useRouteChanged = (callback: any) => {
+  const router = useRouter()
 
   useEffect(() => {
     const handleRouteChange = (url: string) => {
-      callback();
-      console.log("App is changing to: ", url);
-    };
+      callback()
+      console.log('App is changing to: ', url)
+    }
 
-    router.events.on("routeChangeComplete", handleRouteChange);
+    router.events.on('routeChangeComplete', handleRouteChange)
 
     return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router.events, callback]);
-};
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events, callback])
+}
 
-const MobileNav = ({
-  email, 
-  signOut
-}:{ 
-  email:string,
-  signOut:any
-}) => {
-  const { isOpen, onToggle, onClose } = useDisclosure();
+const MobileNav = ({ email, signOut }: { email: string; signOut: any }) => {
+  const { isOpen, onToggle, onClose } = useDisclosure()
 
-  useRouteChanged(onClose);
+  useRouteChanged(onClose)
 
   return (
     <>
@@ -46,9 +40,9 @@ const MobileNav = ({
         aria-label="Navigation Menu"
         fontSize="20px"
         variant="ghost"
-        display={{ sm: "inline-flex", md: "none" }}
+        display={{ sm: 'inline-flex', md: 'none' }}
         color="gray.500"
-        icon={Hamburger}
+        icon={<Hamburger />}
         onClick={onToggle}
       />
       <Drawer size="xs" isOpen={isOpen} placement="left" onClose={onClose}>
@@ -60,7 +54,7 @@ const MobileNav = ({
         </DrawerContent>
       </Drawer>
     </>
-  );
-};
+  )
+}
 
-export default MobileNav;
+export default MobileNav
