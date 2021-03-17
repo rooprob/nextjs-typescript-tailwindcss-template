@@ -12,24 +12,25 @@ import { useRouter } from 'next/router'
 import SideNav from './SideNav'
 import Hamburger from '../icons/Hamburger'
 
-const useRouteChanged = (callback: any) => {
+const useRouteChanged = (callback: () => void) => {
   const router = useRouter()
-
   useEffect(() => {
     const handleRouteChange = (url: string) => {
       callback()
       console.log('App is changing to: ', url)
     }
-
     router.events.on('routeChangeComplete', handleRouteChange)
-
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange)
     }
   }, [router.events, callback])
 }
 
-const MobileNav = ({ email, signOut }: { email: string; signOut: any }) => {
+type MobileNavProps = {
+  email: string
+  signOut: () => void
+}
+const MobileNav: React.FC<MobileNavProps> = ({ email, signOut }) => {
   const { isOpen, onToggle, onClose } = useDisclosure()
 
   useRouteChanged(onClose)
@@ -49,7 +50,7 @@ const MobileNav = ({ email, signOut }: { email: string; signOut: any }) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerBody p={0}>
-            <SideNav contentHeight="100vh" top="0" />
+            <SideNav top="0" />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

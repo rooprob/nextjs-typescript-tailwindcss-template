@@ -1,7 +1,7 @@
 import { useColorMode, Stack, Text, Flex, Icon } from '@chakra-ui/react'
 import React from 'react'
 
-const EmptySearch = (props: any) => {
+const EmptySearch: React.FC = () => {
   const { colorMode } = useColorMode()
 
   return (

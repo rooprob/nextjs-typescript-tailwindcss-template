@@ -9,7 +9,7 @@ const badgeColors = {
   FOOD: 'orange',
 }
 
-const DealCard = ({
+const DealCard: React.FC<DealCardProps> = ({
   id,
   daysActive,
   location,
@@ -17,7 +17,7 @@ const DealCard = ({
   userDeals,
   description,
   alcoholType,
-}: DealCardProps) => {
+}) => {
   const { colorMode } = useColorMode()
   const start = daysActive[0].startTime
   const end = daysActive[0].endTime

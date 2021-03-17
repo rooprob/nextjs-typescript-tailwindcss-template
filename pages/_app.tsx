@@ -1,19 +1,19 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider } from '@chakra-ui/react'
 
-import { DefaultSeo } from "next-seo";
-import seo from "../seo.config";
-import { SearchProvider } from "../services/Search.context";
+import { DefaultSeo } from 'next-seo'
+import seo from '../seo.config'
+import { SearchProvider } from '../services/Search.context'
 
-import type { AppProps } from "next/app";
-import Head from "next/head";
+import type { AppProps } from 'next/app'
+import Head from 'next/head'
 
-import * as React from "react";
+import * as React from 'react'
 
-import initAuth from "../utils/initAuth";
+import initAuth from '../utils/initAuth'
 
-initAuth();
+initAuth()
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ChakraProvider>
       <SearchProvider>
@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </SearchProvider>
     </ChakraProvider>
-  );
+  )
 }
 
-export default MyApp;
+export default MyApp

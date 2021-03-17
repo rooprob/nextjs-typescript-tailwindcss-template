@@ -1,4 +1,13 @@
-import { useColorMode, Stack, Text, Box, Flex } from '@chakra-ui/react'
+import {
+  useColorMode,
+  Stack,
+  Text,
+  Box,
+  Flex,
+  BoxProps,
+  ChakraStyleProps,
+  ChakraComponent,
+} from '@chakra-ui/react'
 import React from 'react'
 
 import { ComponentLink } from './NavLink'
@@ -9,7 +18,11 @@ import Home from '../icons/Home'
 import Map from '../icons/Map'
 import WineGlass from '../icons/WineGlass'
 
-const SideNavLink = ({ href, children, icon }: any) => (
+type SideNavLinkProps = {
+  href: string
+  icon: React.ReactNode
+}
+const SideNavLink: React.FC<SideNavLinkProps> = ({ href, children, icon }) => (
   <ComponentLink href={href}>
     <Flex align="center" p={1}>
       <Box as={icon} mr={3} w="24px" />
@@ -18,7 +31,7 @@ const SideNavLink = ({ href, children, icon }: any) => (
   </ComponentLink>
 )
 
-const PageLinks = () => (
+const PageLinks: React.FC = () => (
   <Stack spacing={0} mb={8}>
     <SideNavLink href="/" icon={Home}>
       {'Home'}
@@ -35,7 +48,7 @@ const PageLinks = () => (
   </Stack>
 )
 
-const SideNav = (props: any) => {
+const SideNav: React.FC<BoxProps> = (props) => {
   const { colorMode } = useColorMode()
 
   return (

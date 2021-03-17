@@ -21,7 +21,12 @@ const badgeColors = {
   FOOD: 'orange',
 }
 
-const BarCard = ({ name, address, deals, imageUrl }: BarCardProps) => {
+const BarCard: React.FC<BarCardProps> = ({
+  name,
+  address,
+  deals,
+  imageUrl,
+}) => {
   const { colorMode } = useColorMode()
   const badge =
     deals.length === 1 ? `${deals.length} deal` : `${deals.length} deals`

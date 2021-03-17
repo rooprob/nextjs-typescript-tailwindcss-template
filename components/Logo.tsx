@@ -1,7 +1,10 @@
-import { useColorMode, Box } from '@chakra-ui/react'
+// import { useColorMode, Box } from '@chakra-ui/react'
 
-const Logo = (props: any) => {
-  const { colorMode } = useColorMode()
+import { Box, BoxProps } from '@chakra-ui/react'
+import React from 'react'
+
+const Logo: React.FC<BoxProps> = (props) => {
+  // const { colorMode } = useColorMode()
 
   return (
     <Box

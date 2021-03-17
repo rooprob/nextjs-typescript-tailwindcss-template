@@ -4,17 +4,16 @@ import { ReactElement } from 'react'
 
 import Logo from '../components/Logo'
 
-export const Container = (props: any) => (
+export const Container: React.FC = (props) => (
   <Box width="full" maxWidth="1280px" mx="auto" px={6} {...props} />
 )
 
-const IndexHeader = ({
-  email,
-  onSignOut,
-}: {
-  email: string | null
-  onSignOut: any
-}): ReactElement => {
+type IndexHeaderProps = {
+  email: string
+  onSignOut: () => void
+}
+
+const IndexHeader: React.FC<IndexHeaderProps> = ({ email, onSignOut }) => {
   return (
     <Box as="header" width="full" height="4rem">
       <Box width="full" mx="auto" px={6} pr={[1, 6]} height="100%">

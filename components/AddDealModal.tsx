@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 
 import {
   Modal,
@@ -14,9 +14,9 @@ import {
 } from '@chakra-ui/react'
 import Lorem from 'react-lorem-component'
 
-const AddDealModal = (): ReactNode => {
+const AddDealModal: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const finalRef = React.useRef()
+  const finalRef = React.useRef<HTMLDivElement | null>(null)
 
   console.log('foo bar')
   return (

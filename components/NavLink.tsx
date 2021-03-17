@@ -1,9 +1,12 @@
-import { Box, useColorMode } from '@chakra-ui/react'
+import { Box, BoxProps, useColorMode } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import React, { cloneElement, forwardRef } from 'react'
 
-const NavLink = ({ children, ...props }: any) => {
+type NavLinkProps = {
+  href: string
+}
+const NavLink: React.FC<NavLinkProps> = ({ children, ...props }) => {
   const router = useRouter()
   let isActive = false
 
@@ -18,12 +21,18 @@ const NavLink = ({ children, ...props }: any) => {
   )
 }
 
-export const stringToUrl = (str: string, path = '/') => {
+export const stringToUrl = (str: string, path = '/'): string => {
   return `${path}${str.toLowerCase().split(' ').join('-')}`
 }
 
-export const SideNavLink = forwardRef(
-  ({ children, icon, ...props }: any, ref) => {
+type SideNavLinkProps = {
+  children: React.ReactNode
+  icon: string
+}
+type Ref = BoxProps
+
+export const SideNavLink = forwardRef<Ref, SideNavLinkProps>(
+  ({ children, icon, ...props }, ref) => {
     const { colorMode } = useColorMode()
     const color = { light: 'gray.700', dark: 'whiteAlpha.700' }
     return (

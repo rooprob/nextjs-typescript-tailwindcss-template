@@ -1,38 +1,38 @@
-import {useToast} from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react'
 import { withAuthUser, AuthAction } from 'next-firebase-auth'
 
-import Auth from '../components/Auth';
-import {useRouter} from 'next/router';
+import Auth from '../components/Auth'
+import { useRouter } from 'next/router'
 
 import firebase from 'firebase/app'
 
 const AuthPage = () => {
-  const toast = useToast();
-  const router = useRouter();
+  const toast = useToast()
+  const router = useRouter()
 
-  const signIn = ({ email, pass }: any) => {
+  const signIn = ({ email, password }: any) => {
     firebase
       .auth()
-      .signInWithEmailAndPassword(email, pass)
+      .signInWithEmailAndPassword(email, password)
       .then(() => {
-        router.push("/deals");
+        router.push('/deals')
       })
       .catch((error: any) => {
         toast({
-          title: "An error occurred.",
+          title: 'An error occurred.',
           description: error.message,
-          status: "error",
+          status: 'error',
           duration: 9000,
           isClosable: true,
-        });
-      });
-  };
+        })
+      })
+  }
 
-  return <Auth type="Sign In" onSubmit={signIn} />;
-};
+  return <Auth type="Sign In" onSubmit={signIn} />
+}
 
 export default withAuthUser({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
   whenUnauthedBeforeInit: AuthAction.RETURN_NULL,
   whenUnauthedAfterInit: AuthAction.RENDER,
-})(AuthPage);
+})(AuthPage)

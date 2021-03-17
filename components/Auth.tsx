@@ -4,6 +4,7 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Input,
   Modal,
@@ -12,49 +13,66 @@ import {
   ModalContent,
   ModalOverlay,
   Stack,
+  StackProps,
   useColorMode,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
 
-import { useForm } from 'react-hook-form'
+import { DeepMap, FieldError, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 
 import Logo from '../components/Logo'
 
 import firebase from 'firebase/app'
+import React from 'react'
 
-const AuthContent = ({ register, errors, type, ...rest }: any) => (
+interface AuthFormData {
+  email: string
+  password: string
+}
+
+type AuthContentProps = {
+  errors: DeepMap<AuthFormData, FieldError>
+  register: () => void
+  type: string
+}
+
+type CompositeAuthContent = AuthContentProps & StackProps
+
+const AuthContent: React.FC<CompositeAuthContent> = ({
+  register,
+  errors,
+  type,
+  ...rest
+}) => (
   <Stack {...rest}>
     <Box as="a" href="/" aria-label="daydrink, Back to homepage">
       <Logo pb={8} w="200px" mx="auto" />
     </Box>
-    <FormControl isInvalid={errors.email && errors.email.message}>
+    <FormControl
+      isInvalid={!!errors?.email}
+      errortext={errors?.email?.message}
+      isRequired
+    >
       <FormLabel>Email Address</FormLabel>
-      <Input
-        autoFocus
-        aria-label="Email Address"
-        name="email"
-        ref={register({
-          required: 'Please enter your email.',
-        })}
-        placeholder="name@site.com"
-      />
-      <FormErrorMessage>
-        {errors.email && errors.email.message}
-      </FormErrorMessage>
+      <Input autoFocus aria-label="Email Address" name="email" ref={register} />
+      <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
+      <FormHelperText>Please provide your email address</FormHelperText>
     </FormControl>
-    <FormControl isInvalid={errors.pass && errors.pass.message}>
+    <FormControl
+      isInvalid={!!errors?.password}
+      errortext={errors?.password?.message}
+      isRequired
+    >
       <FormLabel>Password</FormLabel>
       <Input
         aria-label="Password"
-        name="pass"
+        name="password"
         type="password"
-        ref={register({
-          required: 'Please enter a password.',
-        })}
+        ref={register}
       />
-      <FormErrorMessage>{errors.pass && errors.pass.message}</FormErrorMessage>
+      <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
     </FormControl>
     <Button type="submit" mt={4} variantcolor="teal" variant="solid">
       {type}
@@ -62,9 +80,13 @@ const AuthContent = ({ register, errors, type, ...rest }: any) => (
   </Stack>
 )
 
-const FullScreenAuth = ({ type, onSubmit }: any) => {
+type FullScreenAuthProps = {
+  type: string
+  onSubmit: (data: AuthFormData) => void
+}
+const FullScreenAuth: React.FC<FullScreenAuthProps> = ({ type, onSubmit }) => {
   const { colorMode } = useColorMode()
-  const { handleSubmit, register, errors } = useForm()
+  const { register, handleSubmit, errors } = useForm<AuthFormData>()
 
   return (
     <Flex align="center" justify="center" h="100vh">
@@ -90,8 +112,19 @@ const FullScreenAuth = ({ type, onSubmit }: any) => {
   )
 }
 
-const AuthModal = ({ isOpen, onClose, type, onSubmit }: any) => {
-  const { handleSubmit, register, errors } = useForm()
+type AuthModalProps = {
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (data: AuthFormData) => void
+  type: string
+}
+const AuthModal: React.FC<AuthModalProps> = ({
+  isOpen,
+  onClose,
+  type,
+  onSubmit,
+}) => {
+  const { register, handleSubmit, errors } = useForm<AuthFormData>()
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -118,15 +151,21 @@ const AuthModal = ({ isOpen, onClose, type, onSubmit }: any) => {
   )
 }
 
-export const withAuthModal = (Component: any) => (props: any) => {
+type AuthModalComponent = {
+  openAuthModal: () => void
+}
+
+export const withAuthModal = (
+  Component: React.FC<AuthModalComponent>,
+) => (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
-  const signUp = ({ email, pass }: any) => {
+  const signUp = ({ email, password }: { email: string; password: string }) => {
     firebase
       .auth()
-      .createUserWithEmailAndPassword(email, pass)
-      .then((response) => {
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
         toast({
           title: 'Success! 🍻',
           description: 'Your account has been created.',
@@ -136,7 +175,7 @@ export const withAuthModal = (Component: any) => (props: any) => {
         })
         onClose()
       })
-      .catch((error: any) => {
+      .catch((error) => {
         toast({
           title: 'An error occurred.',
           description: error.message,
@@ -154,24 +193,30 @@ export const withAuthModal = (Component: any) => (props: any) => {
         type="Sign Up"
         onSubmit={signUp}
       />
-      <Component openAuthModal={onOpen} {...props} />
+      <Component openAuthModal={onOpen} />
     </>
   )
 }
 
-export const withSignInRedirect = (Component: any) => (props: any) => {
+type AuthRedirectedComponent = {
+  onSignIn: () => void
+  onSignOut: () => void
+}
+export const withSignInRedirect = (
+  Component: React.FC<AuthRedirectedComponent>,
+) => (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
   const router = useRouter()
 
-  const signIn = ({ email, pass }: any) => {
+  const signIn = ({ email, password }: { email: string; password: string }) => {
     firebase
       .auth()
-      .signInWithEmailAndPassword(email, pass)
-      .then((response) => {
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
         router.push('/deals')
       })
-      .catch((error: any) => {
+      .catch((error) => {
         toast({
           title: 'An error occurred.',
           description: error.message,
@@ -215,7 +260,7 @@ export const withSignInRedirect = (Component: any) => (props: any) => {
         type="Sign In"
         onSubmit={signIn}
       />
-      <Component onSignIn={onOpen} onSignOut={signOut} {...props} />
+      <Component onSignIn={onOpen} onSignOut={signOut} />
     </>
   )
 }

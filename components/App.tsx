@@ -6,7 +6,12 @@ import { useAlcoholFilter } from '../services/Alcohol.context'
 import SideNav from '../components/SideNav'
 import Header from '../components/Header'
 
-const App = ({ email, signOut, children, ...rest }: any): ReactElement => {
+type AppProps = {
+  email: string
+  signOut: () => void
+}
+
+const App: React.FC<AppProps> = ({ children, email, signOut, ...rest }) => {
   const { colorMode } = useColorMode()
   const searchBox = useSearch()
   const alcoholFilter = useAlcoholFilter()

@@ -16,11 +16,13 @@ import MobileNav from './MobileNav'
 import Logo from './Logo'
 import { AlcoholContextType, SearchContextType } from '../types/global.types'
 
+type KeyPressed = ({ key }: { key: string }) => void
+
 // refactor out to keyboard shortcuts
 const useKeyPress = (targetKey: string) => {
   const [keyPressed, setKeyPressed] = useState(false)
 
-  const downHandler = ({ key }: any) => {
+  const downHandler: KeyPressed = ({ key }) => {
     console.log(`keyDown for ${key}`)
     if (key === targetKey) {
       console.log('setKeyPressed true')
@@ -28,7 +30,7 @@ const useKeyPress = (targetKey: string) => {
     }
   }
 
-  const upHandler = ({ key }: any) => {
+  const upHandler: KeyPressed = ({ key }) => {
     console.log(`keyUp for ${key}`)
     if (key === targetKey) {
       setKeyPressed(false)
@@ -51,13 +53,13 @@ const useKeyPress = (targetKey: string) => {
 
 type HeaderProps = {
   email: string
-  signOut: any
+  signOut: () => void
   searchBox: SearchContextType
   alcoholFilter: AlcoholContextType
 }
 
 const Header = (props: HeaderProps): ReactElement => {
-  const { email, signOut, searchBox, alcoholFilter, ...rest } = props
+  const { email, signOut, searchBox, ...rest } = props
 
   const { colorMode, toggleColorMode } = useColorMode()
   const bg = { light: 'white', dark: 'gray.800' }
