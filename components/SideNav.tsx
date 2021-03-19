@@ -51,11 +51,12 @@ const SideNav: React.FC<BoxProps> = (props) => {
   return (
     <Box
       backgroundColor={colorMode === 'light' ? 'white' : 'gray.800'}
+      zIndex="-1"
       position="fixed"
       left="0"
       width="100%"
       height="100%"
-      top="0"
+      top="3em"
       right="0"
       {...props}
     >
