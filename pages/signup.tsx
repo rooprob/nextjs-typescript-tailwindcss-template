@@ -1,7 +1,7 @@
 import { useToast } from '@chakra-ui/react'
 import { withAuthUser, AuthAction } from 'next-firebase-auth'
 
-import Auth from '../components/Auth'
+import FullScreenAuth from '../components/AuthForms'
 import { useRouter } from 'next/router'
 
 import firebase from 'firebase/app'
@@ -40,7 +40,7 @@ const SignUpPage = () => {
       })
   }
 
-  return <Auth type="Sign Up" onSubmit={signUp} />
+  return <FullScreenAuth type="Sign Up" onSubmit={signUp} />
 }
 
 export default withAuthUser({
