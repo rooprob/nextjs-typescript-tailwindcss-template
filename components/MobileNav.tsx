@@ -46,7 +46,7 @@ const MobileNav: React.FC<MobileNavProps> = () => {
         icon={<Hamburger />}
         onClick={onToggle}
       />
-      <Drawer size="xs" isOpen={isOpen} placement="left" onClose={onClose}>
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerBody p={0}>

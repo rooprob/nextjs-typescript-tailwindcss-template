@@ -24,3 +24,6 @@ https://github.com/rwieruch/nextjs-firebase-authentication
 
 Chakra UI
 https://chakra-ui.com/guides/as-prop
+
+Hero
+https://raptis.wtf/blog/build-a-landing-page-with-chakra-ui-part-1/

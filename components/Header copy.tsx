@@ -8,13 +8,48 @@ import {
   Input,
   Icon,
 } from '@chakra-ui/react'
-import { useRef, ReactElement } from 'react'
+import { useState, useEffect, useRef, ReactElement } from 'react'
 import { CgDarkMode } from 'react-icons/cg'
 import { VscColorMode } from 'react-icons/vsc'
 
 import MobileNav from './MobileNav'
-import Logo from './SimpleLogo'
+import Logo from './Logo'
 import { SearchContextType } from '../types/global.types'
+
+type KeyPressed = ({ key }: { key: string }) => void
+
+// refactor out to keyboard shortcuts
+const useKeyPress = (targetKey: string) => {
+  const [keyPressed, setKeyPressed] = useState(false)
+
+  const downHandler: KeyPressed = ({ key }) => {
+    console.log(`keyDown for ${key}`)
+    if (key === targetKey) {
+      console.log('setKeyPressed true')
+      setKeyPressed(true)
+    }
+  }
+
+  const upHandler: KeyPressed = ({ key }) => {
+    console.log(`keyUp for ${key}`)
+    if (key === targetKey) {
+      setKeyPressed(false)
+      console.log('setKeyPressed false')
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', downHandler)
+    window.addEventListener('keyup', upHandler)
+
+    return () => {
+      window.removeEventListener('keydown', downHandler)
+      window.removeEventListener('keyup', upHandler)
+    }
+  }, [])
+
+  return keyPressed
+}
 
 type HeaderProps = {
   email: string | null
@@ -28,6 +63,8 @@ const Header = (props: HeaderProps): ReactElement => {
   const { colorMode, toggleColorMode } = useColorMode()
   const bg = { light: 'white', dark: 'gray.800' }
 
+  const slashPress = useKeyPress('/')
+
   const inputRef = useRef<HTMLInputElement>()
   const inputElement = inputRef.current
   if (inputElement) {
@@ -36,6 +73,7 @@ const Header = (props: HeaderProps): ReactElement => {
 
   return (
     <Box
+      pos="fixed"
       as="header"
       top="0"
       zIndex="4"
@@ -44,13 +82,13 @@ const Header = (props: HeaderProps): ReactElement => {
       right="0"
       borderBottomWidth="0px"
       width="full"
-      height="3rem"
+      height="4rem"
       {...rest}
     >
       <Box width="full" mx="auto" px={6} pr={[1, 6]} height="100%">
         <Flex
           size="100%"
-          p={[0]}
+          p={[0, 6]}
           pl={[0, 4]}
           align="center"
           justify="space-between"
@@ -63,7 +101,12 @@ const Header = (props: HeaderProps): ReactElement => {
           >
             <Logo w="100%" h="100px" />
           </Box>
-          <InputGroup display="block" width="100%" ml={16} mr={16}>
+          <InputGroup
+            display={slashPress ? 'block' : 'none'}
+            width="100%"
+            ml={16}
+            mr={16}
+          >
             <InputLeftElement
               children={<Icon name="search" color="gray.500" />}
             />
@@ -72,6 +115,7 @@ const Header = (props: HeaderProps): ReactElement => {
               onChange={searchBox.onSearch}
               value={searchBox.search}
               //ref={inputElement}
+              autoFocus={slashPress}
               placeholder={`Search for deals (Press "/" to focus)`}
               bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
             />
@@ -89,7 +133,7 @@ const Header = (props: HeaderProps): ReactElement => {
               onClick={toggleColorMode}
               icon={colorMode === 'light' ? <CgDarkMode /> : <VscColorMode />}
             />
-            <MobileNav email={email} signOut={signOut} />
+            {!slashPress && <MobileNav email={email} signOut={signOut} />}
           </Flex>
         </Flex>
       </Box>

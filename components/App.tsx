@@ -25,10 +25,10 @@ const App: React.FC<AppProps & BoxProps> = ({
       <Box>
         <SideNav
           display={['none', null, 'block']}
-          maxWidth="18rem"
+          maxWidth="15rem"
           width="full"
         />
-        <Box pl={[0, null, '18rem']} mt="4rem">
+        <Box pl={[0, null, '15rem']} mt="4rem">
           <Box
             as="section"
             backgroundColor={colorMode === 'light' ? 'gray.100' : 'gray.900'}
