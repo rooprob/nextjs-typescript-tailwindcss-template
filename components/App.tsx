@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react'
 import { useColorMode, Box, BoxProps } from '@chakra-ui/react'
 
 import { useSearch } from '../services/Search.context'
-import { useAlcoholFilter } from '../services/Alcohol.context'
 import SideNav from '../components/SideNav'
 import Header from '../components/Header'
 
@@ -19,7 +18,6 @@ const App: React.FC<AppProps & BoxProps> = ({
 }) => {
   const { colorMode } = useColorMode()
   const searchBox = useSearch()
-  const alcoholFilter = useAlcoholFilter()
 
   return (
     <>

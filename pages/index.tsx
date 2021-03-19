@@ -1,4 +1,5 @@
 import {
+  AuthAction,
   useAuthUser,
   withAuthUser,
   withAuthUserTokenSSR,
@@ -57,4 +58,6 @@ const HomePage = () => {
 
 export const getServerSideProps = withAuthUserTokenSSR()()
 
-export default withAuthUser()(HomePage)
+export default withAuthUser({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+})(HomePage)

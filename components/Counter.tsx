@@ -38,11 +38,6 @@ export const Counter2 = () => {
   return <h1>{count} from Counter2</h1>
 }
 
-type useIntervalProps = {
-  callback: () => void
-  delay: number
-}
-
 export const useInterval = (callback: () => void, delay: number): void => {
   const savedCallback = useRef<Callback>()
 

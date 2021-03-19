@@ -22,7 +22,7 @@ import {
 import { DeepMap, FieldError, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 
-import Logo from '../components/Logo'
+import Logo from './Logo'
 
 import firebase from 'firebase/app'
 import React from 'react'

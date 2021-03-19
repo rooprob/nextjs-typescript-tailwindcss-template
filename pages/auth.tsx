@@ -1,7 +1,7 @@
 import { useToast } from '@chakra-ui/react'
 import { withAuthUser, AuthAction } from 'next-firebase-auth'
 
-import FullScreenAuth from '../components/Auth'
+import FullScreenAuth from '../components/AuthForms'
 import { useRouter } from 'next/router'
 
 import firebase from 'firebase/app'
