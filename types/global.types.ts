@@ -1,6 +1,4 @@
 import { NextPageContext } from 'next'
-import { type } from 'os'
-import { UserInfo } from './auth.types'
 
 // re-read this comparison of props behaviour from react prop-types and typescript...
 // https://www.benmvp.com/blog/react-prop-types-with-typescript/
@@ -34,16 +32,6 @@ export interface AlcoholContextType {
   onSearch: (search: string) => void
   onChangeDayOfWeek: (dayOfWeek: DayOfWeek) => void
   onChangeFilterAlcoholType: (alcoholType: AlcoholType) => void
-}
-
-export type DealCardProps = {
-  id: string
-  daysActive: any[]
-  location: any
-  score: number
-  userDeals: any
-  description: string
-  alcoholType: AlcoholType
 }
 
 export type BarCardProps = {

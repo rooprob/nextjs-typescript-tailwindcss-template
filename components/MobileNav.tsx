@@ -27,10 +27,10 @@ const useRouteChanged = (callback: () => void) => {
 }
 
 type MobileNavProps = {
-  email: string
+  email: string | null
   signOut: () => void
 }
-const MobileNav: React.FC<MobileNavProps> = ({ email, signOut }) => {
+const MobileNav: React.FC<MobileNavProps> = () => {
   const { isOpen, onToggle, onClose } = useDisclosure()
 
   useRouteChanged(onClose)

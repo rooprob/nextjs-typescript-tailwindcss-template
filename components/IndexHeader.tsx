@@ -1,6 +1,5 @@
-import { Box, Flex, Heading, Text, Button } from '@chakra-ui/react'
+import { Box, Flex, Button } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import { ReactElement } from 'react'
 
 import Logo from '../components/Logo'
 
@@ -9,7 +8,7 @@ export const Container: React.FC = (props) => (
 )
 
 type IndexHeaderProps = {
-  email: string
+  email: string | null
   onSignOut: () => void
 }
 

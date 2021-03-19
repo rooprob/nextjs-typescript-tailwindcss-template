@@ -14,12 +14,6 @@ import Location from '../icons/Location'
 import { BarCardProps } from '../types/global.types'
 
 // import Voter from './Voter';
-const badgeColors = {
-  BEER: 'teal',
-  WINE: 'red',
-  LIQUOR: 'blue',
-  FOOD: 'orange',
-}
 
 const BarCard: React.FC<BarCardProps> = ({
   name,

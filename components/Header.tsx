@@ -14,7 +14,7 @@ import { VscColorMode } from 'react-icons/vsc'
 
 import MobileNav from './MobileNav'
 import Logo from './Logo'
-import { AlcoholContextType, SearchContextType } from '../types/global.types'
+import { SearchContextType } from '../types/global.types'
 
 type KeyPressed = ({ key }: { key: string }) => void
 
@@ -52,10 +52,9 @@ const useKeyPress = (targetKey: string) => {
 }
 
 type HeaderProps = {
-  email: string
+  email: string | null
   signOut: () => void
   searchBox: SearchContextType
-  alcoholFilter: AlcoholContextType
 }
 
 const Header = (props: HeaderProps): ReactElement => {

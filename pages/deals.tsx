@@ -3,7 +3,6 @@ import {
   useAuthUser,
   withAuthUser,
   withAuthUserTokenSSR,
-  AuthAction,
 } from 'next-firebase-auth'
 
 //import {useDeals} from '../graphql/hooks';
@@ -11,17 +10,17 @@ import { useSearch } from '../services/Search.context'
 import { useAlcoholFilter } from '../services/Alcohol.context'
 // import {withApollo} from '../graphql/apollo';
 import App from '../components/App'
-import DealCard from '../components/DealCard'
+import DealCard, { DealCardProps } from '../components/DealCard'
 import AddDealModal from '../components/AddDealModal'
 import EmptySearch from '../components/EmptySearch'
-import { AlcoholType, DealCardProps } from '../types/global.types'
 import getAbsoluteURL from '../utils/getAbsoluteURL'
+import { NextApiRequest } from 'next'
 
 interface Deals {
   deals: DealCardProps[]
 }
 
-const DealsPage = ({ emailVerified, favoriteColor }: any) => {
+const DealsPage = () => {
   const AuthUser = useAuthUser()
 
   const { search } = useSearch()
@@ -113,15 +112,13 @@ const DealsPage = ({ emailVerified, favoriteColor }: any) => {
   )
 }
 
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})(async (ctx: any) => {
+export const getServerSideProps = withAuthUserTokenSSR()(async (ctx) => {
   // Optionally get any other props
   const { AuthUser } = ctx
 
   // If the user is not authenticated at all, do a simple custom redirect
   // to login page (equivalent to REDIRECT_TO_LOGIN parameter of withAuthUserSSR).
-  if (!AuthUser || !AuthUser.id) {
+  if (!AuthUser?.id) {
     console.log('Simply not logged in...')
     console.log(AuthUser)
 
@@ -154,9 +151,11 @@ export const getServerSideProps = withAuthUserTokenSSR({
     }
   }
   // And finally if everything is OK, we return a props object as usual.
-
   const token = await AuthUser.getIdToken()
-  const endpoint = getAbsoluteURL('/api/example/color', ctx.req)
+  const endpoint = getAbsoluteURL(
+    '/api/example/color',
+    ctx.req as NextApiRequest,
+  )
   const response = await fetch(endpoint, {
     method: 'GET',
     headers: {

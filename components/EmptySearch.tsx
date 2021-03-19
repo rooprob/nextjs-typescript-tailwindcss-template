@@ -1,9 +1,7 @@
-import { useColorMode, Stack, Text, Flex, Icon } from '@chakra-ui/react'
+import { Stack, Text, Flex, Icon } from '@chakra-ui/react'
 import React from 'react'
 
 const EmptySearch: React.FC = () => {
-  const { colorMode } = useColorMode()
-
   return (
     <Flex justify="center" textAlign="center" mb={8} py={12}>
       <Stack align="center">

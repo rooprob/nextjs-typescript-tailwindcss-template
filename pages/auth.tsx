@@ -6,18 +6,23 @@ import { useRouter } from 'next/router'
 
 import firebase from 'firebase/app'
 
+type SignInProps = {
+  email: string
+  password: string
+}
+
 const AuthPage = () => {
   const toast = useToast()
   const router = useRouter()
 
-  const signIn = ({ email, password }: any) => {
+  const signIn = ({ email, password }: SignInProps) => {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         router.push('/deals')
       })
-      .catch((error: any) => {
+      .catch((error) => {
         toast({
           title: 'An error occurred.',
           description: error.message,

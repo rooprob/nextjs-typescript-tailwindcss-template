@@ -5,13 +5,10 @@ import {
   Box,
   Flex,
   BoxProps,
-  ChakraStyleProps,
-  ChakraComponent,
 } from '@chakra-ui/react'
 import React from 'react'
 
 import { ComponentLink } from './NavLink'
-import AddDealModal from './AddDealModal'
 import Deal from '../icons/Deal'
 // import Filters from './Filters';
 import Home from '../icons/Home'
@@ -20,7 +17,7 @@ import WineGlass from '../icons/WineGlass'
 
 type SideNavLinkProps = {
   href: string
-  icon: React.ReactNode
+  icon: React.FC
 }
 const SideNavLink: React.FC<SideNavLinkProps> = ({ href, children, icon }) => (
   <ComponentLink href={href}>

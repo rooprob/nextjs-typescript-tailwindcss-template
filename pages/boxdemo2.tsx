@@ -1,7 +1,8 @@
-import { Stack, Flex, Box, Grid, Button, Heading } from '@chakra-ui/react'
+import { Stack, Flex, Box, Button, Heading } from '@chakra-ui/react'
+import { withAuthUser } from 'next-firebase-auth'
 import React, { useState } from 'react'
 
-const BoxApp = () => {
+const BoxDemo2 = () => {
   const [boxHeight, editHeight] = useState(20)
   const [boxColor, editColor] = useState('red')
   const [colorIntensity, editIntensity] = useState(500)
@@ -88,4 +89,4 @@ const BoxApp = () => {
   )
 }
 
-export default BoxApp
+export default withAuthUser()(BoxDemo2)

@@ -27,7 +27,7 @@ export const stringToUrl = (str: string, path = '/'): string => {
 
 type SideNavLinkProps = {
   children: React.ReactNode
-  icon: string
+  icon: typeof Box
 }
 type Ref = BoxProps
 
@@ -62,7 +62,7 @@ export const SideNavLink = forwardRef<Ref, SideNavLinkProps>(
 export const TopNavLink = forwardRef(({ href, ...props }: any, ref) => {
   return (
     <NavLink href={href}>
-      {(isActive: any) => (
+      {(isActive: boolean) => (
         <SideNavLink
           ref={ref}
           aria-current={isActive ? 'page' : undefined}
@@ -83,7 +83,7 @@ export const ComponentLink = forwardRef(({ href, ...props }: any, ref) => {
 
   return (
     <NavLink href={href}>
-      {(isActive: any) => (
+      {(isActive: boolean) => (
         <SideNavLink
           ref={ref}
           aria-current={isActive ? 'page' : undefined}

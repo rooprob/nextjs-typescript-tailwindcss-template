@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { useColorMode, Box } from '@chakra-ui/react'
+import { useColorMode, Box, BoxProps } from '@chakra-ui/react'
 
 import { useSearch } from '../services/Search.context'
 import { useAlcoholFilter } from '../services/Alcohol.context'
@@ -7,23 +7,23 @@ import SideNav from '../components/SideNav'
 import Header from '../components/Header'
 
 type AppProps = {
-  email: string
+  email: string | null
   signOut: () => void
 }
 
-const App: React.FC<AppProps> = ({ children, email, signOut, ...rest }) => {
+const App: React.FC<AppProps & BoxProps> = ({
+  children,
+  email,
+  signOut,
+  ...rest
+}) => {
   const { colorMode } = useColorMode()
   const searchBox = useSearch()
   const alcoholFilter = useAlcoholFilter()
 
   return (
     <>
-      <Header
-        email={email}
-        signOut={signOut}
-        searchBox={searchBox}
-        alcoholFilter={alcoholFilter}
-      />
+      <Header email={email} signOut={signOut} searchBox={searchBox} />
       <Box>
         <SideNav
           display={['none', null, 'block']}

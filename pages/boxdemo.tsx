@@ -1,6 +1,7 @@
-import { Stack, Flex, Box, Grid } from '@chakra-ui/react'
+import { Flex, Box, Grid } from '@chakra-ui/react'
+import { withAuthUser } from 'next-firebase-auth'
 
-const BoxApp = () => {
+const BoxDemo = () => {
   const flexSettings = {
     flex: '1',
     minW: '300px',
@@ -53,4 +54,4 @@ const BoxApp = () => {
   )
 }
 
-export default BoxApp
+export default withAuthUser()(BoxDemo)

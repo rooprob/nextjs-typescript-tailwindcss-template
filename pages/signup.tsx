@@ -1,45 +1,50 @@
-import {useToast} from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react'
 import { withAuthUser, AuthAction } from 'next-firebase-auth'
 
-import Auth from '../components/Auth';
-import {useRouter} from 'next/router';
+import Auth from '../components/Auth'
+import { useRouter } from 'next/router'
 
 import firebase from 'firebase/app'
 
-const SignUpPage = () => {
-  const toast = useToast();
-  const router = useRouter();
+type SignUpProps = {
+  email: string
+  password: string
+}
 
-  const signUp = ({ email, pass }: any) => {
+const SignUpPage = () => {
+  const toast = useToast()
+  const router = useRouter()
+
+  const signUp = ({ email, password }: SignUpProps) => {
     firebase
       .auth()
-      .createUserWithEmailAndPassword(email, pass)
+      .createUserWithEmailAndPassword(email, password)
       .then(() => {
         toast({
-          title: "Success! 🍻",
-          description: "Your account has been created.",
-          status: "success",
+          title: 'Success! 🍻',
+          description: 'Your account has been created.',
+          status: 'success',
           duration: 3000,
           isClosable: true,
-        });
-        router.push("/deals");
+        })
+        router.push('/deals')
       })
-      .catch((error: any) => {
+      .catch((error) => {
         toast({
-          title: "An error occurred.",
+          title: 'An error occurred.',
           description: error.message,
-          status: "error",
+          status: 'error',
           duration: 9000,
           isClosable: true,
-        });
-      });
-  };
+        })
+      })
+  }
 
-  return <Auth type="Sign Up" onSubmit={signUp} />;
-};
+  return <Auth type="Sign Up" onSubmit={signUp} />
+}
 
 export default withAuthUser({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
   whenUnauthedBeforeInit: AuthAction.RETURN_NULL,
   whenUnauthedAfterInit: AuthAction.RENDER,
-})(SignUpPage);
+})(SignUpPage)

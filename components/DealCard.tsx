@@ -1,5 +1,5 @@
 import { useColorMode, Box, Badge, Text, Flex, Stack } from '@chakra-ui/react'
-import { AlcoholType, DealCardProps } from '../types/global.types'
+import { AlcoholType } from '../types/global.types'
 
 // import Voter from './Voter';
 const badgeColors = {
@@ -9,18 +9,25 @@ const badgeColors = {
   FOOD: 'orange',
 }
 
+export type DealCardProps = {
+  id: string
+  daysActive: Date[]
+  location: number[]
+  score: number
+  userDeals: string
+  description: string
+  alcoholType: AlcoholType
+}
+
 const DealCard: React.FC<DealCardProps> = ({
-  id,
   daysActive,
   location,
-  score,
-  userDeals,
   description,
   alcoholType,
 }) => {
   const { colorMode } = useColorMode()
-  const start = daysActive[0].startTime
-  const end = daysActive[0].endTime
+  const start = daysActive[0]
+  const end = daysActive[1]
 
   return (
     <Box
@@ -41,7 +48,9 @@ const DealCard: React.FC<DealCardProps> = ({
             </Text>
             <Badge variantColor="grey">{`${start} - ${end}`}</Badge>
           </Flex>
-          <Text color="gray.400">{location.name}</Text>
+          <Text color="gray.400">
+            {location[0]}, {location[1]}
+          </Text>
         </Stack>
       </Flex>
     </Box>

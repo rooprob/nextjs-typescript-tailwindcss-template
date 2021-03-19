@@ -8,23 +8,22 @@ import {
 
 //import {useBars} from '../graphql/hooks';
 import { useSearch } from '../services/Search.context'
-import { useAlcoholFilter } from '../services/Alcohol.context'
 // import {withApollo} from '../graphql/apollo';
 import App from '../components/App'
 import BarCard from '../components/BarCard'
 import EmptySearch from '../components/EmptySearch'
-import { BarCardProps, LocationCardProps } from '../types/global.types'
+import { BarCardProps } from '../types/global.types'
 import getAbsoluteURL from '../utils/getAbsoluteURL'
+import { NextApiRequest } from 'next'
 
 interface Bars {
   locations: BarCardProps[]
 }
 
-const BarsPage = ({ emailVerified, favoriteColor }: any) => {
+const BarsPage = () => {
   const AuthUser = useAuthUser()
 
   const { search } = useSearch()
-  const { dayOfWeek, alcoholTypeFilter } = useAlcoholFilter()
   // const {data, loading} = useBars(dayOfWeek);
   const startDate = new Date()
   startDate.setDate(startDate.getDate() - 2)
@@ -78,7 +77,7 @@ const BarsPage = ({ emailVerified, favoriteColor }: any) => {
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})(async (ctx: any) => {
+})(async (ctx) => {
   // Optionally get any other props
   const { AuthUser } = ctx
 
@@ -118,7 +117,10 @@ export const getServerSideProps = withAuthUserTokenSSR({
   // And finally if everything is OK, we return a props object as usual.
 
   const token = await AuthUser.getIdToken()
-  const endpoint = getAbsoluteURL('/api/example/color', ctx.req)
+  const endpoint = getAbsoluteURL(
+    '/api/example/color',
+    ctx.req as NextApiRequest,
+  )
   const response = await fetch(endpoint, {
     method: 'GET',
     headers: {

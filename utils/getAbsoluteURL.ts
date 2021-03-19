@@ -6,7 +6,7 @@ const getAbsoluteURL = (url: string, req: NextApiRequest): string => {
   if (host === undefined) {
     if (typeof window === 'undefined') {
       throw new Error(
-        'The "req" parameter must be provided if on the server side.'
+        'The "req" parameter must be provided if on the server side.',
       )
     }
     host = window.location.host

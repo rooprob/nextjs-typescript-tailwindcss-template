@@ -1,4 +1,4 @@
-import { useColorMode, Box } from '@chakra-ui/react'
+import { useColorMode, Box, BoxProps } from '@chakra-ui/react'
 
 const Location: React.FC<BoxProps> = (props) => {
   const { colorMode } = useColorMode()

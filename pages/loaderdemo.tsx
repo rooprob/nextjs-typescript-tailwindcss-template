@@ -3,19 +3,23 @@ import {
   CircularProgress,
   CircularProgressLabel,
   Progress,
-  Spinner
-} from "@chakra-ui/react"
-import React, { useEffect, useState } from "react";
+  Spinner,
+} from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import { useInterval } from '../components/Counter'
 
-const Spinners = () => {
-  let [progress, update] = useState(0)
+type useEffectTimeout = ReturnType<typeof setInterval>
 
-  const randomNum = (min:number, max:number):number=> Math.floor(Math.random() * (max - min + 1) + min)
+const Spinners: React.FC = () => {
+  const [progress, update] = useState(0)
 
-  useEffect(() => setInterval(() => {
-    // Reset to 0 when reaches 100
-    update(progress < 100 ? progress += randomNum(0, 4) : 0)
-  }, 500), [])
+  const randomNum = (min: number, max: number): number =>
+    Math.floor(Math.random() * (max - min + 1) + min)
+
+  useInterval(() => {
+    update(progress < 100 ? update(progress + 1) : 0)
+    //+ randomNum(0, 4)) : 0)
+  }, 500)
 
   return (
     <div>
@@ -23,7 +27,12 @@ const Spinners = () => {
         <CircularProgress color="green" isIndeterminate>
           <CircularProgressLabel>{progress}%</CircularProgressLabel>
         </CircularProgress>
-        <CircularProgress value={progress} size="100px" thickness={0.1} color="purple" />
+        <CircularProgress
+          value={progress}
+          size="100px"
+          thickness={0.1}
+          color="purple"
+        />
         <Progress value={progress} w="90%" />
         <Progress value={progress + 10} w="90%" hasStripe isAnimated />
         <Spinner
@@ -35,6 +44,6 @@ const Spinners = () => {
         />
       </Stack>
     </div>
-  );
+  )
 }
-export default Spinners;
+export default Spinners
